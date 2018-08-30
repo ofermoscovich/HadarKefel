@@ -2,7 +2,7 @@ package Kefel;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.Date;
 //import java.util.InputMismatchException;
 //import java.util.Random;
 import java.time.Duration;
@@ -25,11 +25,11 @@ public class Main {
 	private static final int MAXNUMBERRIGHT = 9; // מספר אקראי מקסימלי בתרגיל
 	
 	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
-						// ציור לוח הכפל
+					  // ציור לוח הכפל
 	public static int y, //  מונה שורות
 					  x, // מונה עמודות
 					  
-					  	// משחק הכפולות
+					  // משחק הכפולות
 					  k, // משחק הכפולות - מונה 10 תרגילים
 					  num1,num2, // קבלת שני מספרים אקראיים למכפלה
 					  input, // משחק הכפולות - קבלת קלט מהמשתמש
@@ -160,7 +160,8 @@ public class Main {
 				//num1 = (int) ((Math.random()*(MAXNUMBER-MINNUMBER+1))+MINNUMBER); // נבחר לא להשתמש ב Math בשל כך שלוקח Double 
 			    
 				// מדוד זמן התחלה
-				LocalDateTime now1 = LocalDateTime.now();
+				//LocalDateTime now1 = LocalDateTime.now();
+				Date now1 = new Date();
 				//Date now1.getTime();
 				// לולאת מחזוריות הזדמנויות להשיב במקרה ותשובה אינה נכונה
 				// אם התשובה נכונה, הלולאה תפסיק ונעבור לתרגיל הבא
@@ -189,11 +190,12 @@ public class Main {
 					if (input==num1*num2){
 						// טיפול בתשובה נכונה
 						// עצור מדידת זמן
-						LocalDateTime now2 = LocalDateTime.now();
+						//LocalDateTime now2 = LocalDateTime.now();
+						Date now2 = new Date();
 						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-					    Duration duration = Duration.between(now1, now2);
-					    secondsDiff = Math.abs(duration.getSeconds());
-						
+//					    Duration duration = Duration.between(now1, now2);
+//					    secondsDiff = Math.abs(duration.getSeconds());
+						secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
 						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
@@ -224,10 +226,12 @@ public class Main {
 							// גלה תשובה בניסיון שלישי
 							System.out.println("התשובה הנכונה היא: " + num1*num2);
 							// עצור מדידת זמן
-							LocalDateTime now2 = LocalDateTime.now();
+							//LocalDateTime now2 = LocalDateTime.now();
+							Date now2 = new Date();
 							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-						    Duration duration = Duration.between(now1, now2);
-						    secondsDiff = Math.abs(duration.getSeconds());
+							secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
+//						    Duration duration = Duration.between(now1, now2);
+//						    secondsDiff = Math.abs(duration.getSeconds());
 						}
 					}
 				}
@@ -247,14 +251,15 @@ public class Main {
 			if (tziun * 100 / MAXQUESTIONS > 90){
 				// אם הציון מעל 90 ציין זאת
 				System.out.println("כל הכבוד הדרי - קיבלת ציון גבוה מאד !!!") ;
+				if (secondsTest/MAXQUESTIONS < 9) {
+					// אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
+					System.out.println("כל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל") ;
+				}
 			} else if (tziun * 100 / MAXQUESTIONS < 60){ 
 				// אם הציון מתחת 70 ציין זאת
 				System.out.println("הדרי, מומלץ להוסיף ולתרגל") ;			
 			}
-			if (secondsTest/MAXQUESTIONS < 10) {
-				// אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
-				System.out.println("כל הכבוד הדרי - המלכה  !!!") ;
-			}
+
 			// מונה מבחנים
 			g++ ;
 			

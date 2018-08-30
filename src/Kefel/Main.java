@@ -3,11 +3,6 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-//import java.util.InputMismatchException;
-//import java.util.Random;
-import java.time.Duration;
-import java.time.LocalDateTime;
-//import java.time.LocalDate;
 
 /**
  * פרויקט לוח הכפל של הדרי  
@@ -141,8 +136,8 @@ public class Main {
 			// רד 2 שורות ליצירת רווח
 			System.out.println();
 			System.out.println();
-			System.out.println("מבחן מספר " + (g+1));
-			System.out.println("____________");
+			System.out.println("מבחן מספר " + (g+1) + " מתוך " + MAXTESTS);
+			System.out.println("__________________");
 
 			// --- רוץ ברמת מבחן אחד (כמות תרגילים למבחן אחד) ---- 
 			for (k = 1; k <= MAXQUESTIONS; k++){

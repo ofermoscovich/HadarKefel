@@ -144,20 +144,16 @@ public class Main {
 				// הבא מהמחסנית שני מספרים אקראיים
 				// מספר שמאלי
 				num1 = targil.get(0)[0];
-				//num1 = rand.nextInt((MAXNUMBERLEFT - MINNUMBERLEFT) + 1) + MINNUMBERLEFT;
 				
 				// מספר ימני
 				num2 = targil.get(0)[1] ;
+				
+				// הסר תרגיל מהרשימה למניעת חזרתו
 				targil.remove(0);	
-				// השהייה בין הגרלת מספר השני בכפולה
-				//for(l=1;l<=1000;l++);
-				//num2 = rand.nextInt((MAXNUMBERRIGHT - MINNUMBERRIGHT) + 1) + MINNUMBERRIGHT;
-				//num1 = (int) ((Math.random()*(MAXNUMBER-MINNUMBER+1))+MINNUMBER); // נבחר לא להשתמש ב Math בשל כך שלוקח Double 
 			    
 				// מדוד זמן התחלה
-				//LocalDateTime now1 = LocalDateTime.now();
 				Date now1 = new Date();
-				//Date now1.getTime();
+
 				// לולאת מחזוריות הזדמנויות להשיב במקרה ותשובה אינה נכונה
 				// אם התשובה נכונה, הלולאה תפסיק ונעבור לתרגיל הבא
 			    // --- רמת שאלה במבחן ---- 
@@ -185,11 +181,8 @@ public class Main {
 					if (input==num1*num2){
 						// טיפול בתשובה נכונה
 						// עצור מדידת זמן
-						//LocalDateTime now2 = LocalDateTime.now();
 						Date now2 = new Date();
 						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-//					    Duration duration = Duration.between(now1, now2);
-//					    secondsDiff = Math.abs(duration.getSeconds());
 						secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
@@ -225,8 +218,6 @@ public class Main {
 							Date now2 = new Date();
 							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
 							secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
-//						    Duration duration = Duration.between(now1, now2);
-//						    secondsDiff = Math.abs(duration.getSeconds());
 						}
 					}
 				}

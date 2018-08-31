@@ -47,13 +47,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner console = new Scanner(System.in);
-//		Random rand = new Random();
-		
-//		Integer[] targilItems = new Integer[3]; 
-
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
-		
-		
+
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
 		System.out.println("       לוח הכפל של הדר") ;
@@ -91,30 +86,32 @@ public class Main {
 		
 		//=========== משחק תרגילים ===========
 		// ----  רמת כל המשחק ואתחול ----
+
+		// החלף את צדדי המספרים לצורך אתחול מחסנית התרגילים
+		// הדבר נועד לתמוך בלוגיקת מניעת חזרות של תרגילים במחסנית
+		// לשם כך נבדוק אם המטריצה של לוח הכפל הנבחר ע"י המשתמש
+		// באמצעות בחירת טווחי המספרים ימין ושמאל מהווים מטריצה סימטרית
+		// כלומר שטווח מספרים באורך שווה לטווח המספרים ברוחב
+		// אם לא שווה ויש רוחב גדול מאורך, נהפוך את הטבלה,
+		// כלומר נעמיד את מלבן המטריצה כדי לכסות את הטווח הארוך בין הרוחב והאורך
+		// וכך ניצור כיסוי מלא של תרגילים תוך שמירת עיקרון מניעת חזרות
+		// ובהתאם לבחירת המשתמש בכמות מבחנים, מספר תריגילים במבחן והטווחים של המספרים
+		if(MAXNUMBER1 - MINNUMBER1 >= MAXNUMBER2 - MINNUMBER2) {
+			minNumberLeft = MINNUMBER1;
+			maxNumberLeft = MAXNUMBER1;
+			minNumberRight = MINNUMBER2;
+			maxNumberRight = MAXNUMBER2;
+		} else {
+			minNumberLeft = MINNUMBER2;
+			maxNumberLeft = MAXNUMBER2;
+			minNumberRight = MINNUMBER1;
+			maxNumberRight = MAXNUMBER1;
+		}
+
 		// המטרה של אתחול התרגילים מראש הוא לבצע בקרה על כל התרגילים במכל המבחנים
 		// כדי למנוע חזרה על תרגילים שהיו באותו מבחן ובמבחנים אחרים באותו סט
 		// מלא מחסנית בתרגילים כמספר כמות תרגילים בכל מבחן ומספר המבחנים
 		do {
-			// החלף את צדדי המספרים לצורך אתחול מחסנית התרגילים
-			// הדבר נועד לתמוך בלוגיקת מניעת חזרות של תרגילים במחסנית
-			// לשם כך נבדוק אם המטריצה של לוח הכפל הנבחר ע"י המשתמש
-			// באמצעות בחירת טווחי המספרים ימין ושמאל מהווים מטריצה סימטרית
-			// כלומר שטווח מספרים באורך שווה לטווח המספרים ברוחב
-			// אם לא שווה ויש רוחב גדול מאורך, נהפוך את הטבלה,
-			// כלומר נעמיד את מלבן המטריצה כדי לכסות את הטווח הארוך בין הרוחב והאורך
-			// וכך ניצור כיסוי מלא של תרגילים תוך שמירת עיקרון מניעת חזרות
-			// ובהתאם לבחירת המשתמש בכמות מבחנים, מספר תריגילים במבחן והטווחים של המספרים
-			if(MAXNUMBER1 - MINNUMBER1 > MAXNUMBER2 - MINNUMBER2) {
-				minNumberLeft = MINNUMBER1;
-				maxNumberLeft = MAXNUMBER1;
-				minNumberRight = MINNUMBER2;
-				maxNumberRight = MAXNUMBER2;
-			} else {
-				minNumberLeft = MINNUMBER2;
-				maxNumberLeft = MAXNUMBER2;
-				minNumberRight = MINNUMBER1;
-				maxNumberRight = MAXNUMBER1;
-			}
 			// רוץ על טווחי המספרים שהוגדרו בתרגיל
 			// לולאה חיצונית למספר שמאלי (שורות)
 			for (y = minNumberLeft; y <= maxNumberLeft ; y++){
@@ -137,9 +134,9 @@ public class Main {
 					// אם תוצאת הכפולה שווה לכפולת מספר עמודה באותו מספר עמודה אז סיים את השורה 
 					// כדי למנוע חזרה על תרגילים בהחלפת צדדי מספרי הכפולה
 					if(x*y==y*y) break;
-					if(numOfTargilim == MAXTESTS*MAXQUESTIONS) break; 
+					if(numOfTargilim == ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1))) break;
 				}
-				if(numOfTargilim == MAXTESTS*MAXQUESTIONS) break;
+				if(numOfTargilim == ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1))) break;
 			}
 			// במידה והסתיים אתחול כל התרגילים האפשריים לטווח הנתון ונשאר מקומות ריקים במכסה,
 			// כלומר אם טרם מולאה מכסת המחסנית) החל חזרות תוך החלפת מקומות המספרים
@@ -149,15 +146,16 @@ public class Main {
 				regularLoop = 0;
 			}
 			// המשך באתחול מחסנית התרגילים כל עוד לא הגעת למספר כולל מקסימלי של תרגילים לכל המבחנים
-		} while(numOfTargilim < MAXTESTS*MAXQUESTIONS );
-		
-//		for (int e = 0; e<= MAXTESTS*MAXQUESTIONS;e++) {
+		} while(numOfTargilim < ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) || (numOfTargilim < MAXQUESTIONS*MAXTESTS));
+
+//		for (int e = 0; (e < ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) || (numOfTargilim < MAXQUESTIONS*MAXTESTS));e++) {
 //			//int bbb = targil.getFirst()[0] ;// + " * " + targil.getFirst() + " = " + targil.getFirst());
 //			System.out.println("(" + e + ")   " + targil.get(e)[0] + " * " + targil.get(e)[1] + " = " + targil.get(e)[2]);
 //		}
+
 		// תערבב תרגילים אם ההגדרה היא 1
 		if(SHUFFLE == 1) Collections.shuffle(targil);
-	
+
 		// --- רוץ ברמת כל המבחנים (מספר מבחנים לסט אחד)  ----
 		do {               
 			// אפס משתנים

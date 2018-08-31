@@ -5,20 +5,20 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
- * פרויקט לוח הכפל של הדרי  
+ * פרויקט לוח הכפל של הדרי
  */
 public class Main {
 	
 	private static final int MAXTESTS = 5; // מקסימום מבחנים
 	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
-	private static final int SHOWTABLE = 1; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
+	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 												// מספר שמאלי
-	private static final int MINNUMBERLEFT = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBERLEFT = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER1 = 9; // מספר אקראי מקסימלי בתרגיל
 												// מספר ימני
-	private static final int MINNUMBERRIGHT = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBERRIGHT = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
 	
 	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
 					  // ציור לוח הכפל
@@ -35,6 +35,10 @@ public class Main {
 					  l, // מונה השהייה בין הגרלת מספרים לכפולות
 					  i, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
 					  s, // מונה מספר תרגילים עבור אתחול המשחק בתרגילים
+					  minNumberLeft, // סדר המספרים האמיתי שירוץ על לולאת אתחול התרגילים
+					  maxNumberLeft, // ההחלפה נועדה למקרה שמטריצת לוח הכפל שנבחרה אינה
+					  minNumberRight,// שווה ויש טווח רוחב מספרים גדול מטווח אורך
+					  maxNumberRight,// במקרה זה, כדי לתמוך בהעדר חזרות על תרגילים, נעמיד את הטבלה בהחלפת סדר המספרים בתרגיל
 					  numOfTargilim,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
 					  regularLoop;  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל 
 	public static long secondsDiff, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
@@ -53,7 +57,7 @@ public class Main {
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
 		System.out.println("       לוח הכפל של הדר") ;
-		System.out.println("       ---------------") ;
+		System.out.println("---------------       ") ;
 
 		// לולאה חיצונית לציור 10 שורות
 
@@ -91,11 +95,31 @@ public class Main {
 		// כדי למנוע חזרה על תרגילים שהיו באותו מבחן ובמבחנים אחרים באותו סט
 		// מלא מחסנית בתרגילים כמספר כמות תרגילים בכל מבחן ומספר המבחנים
 		do {
+			// החלף את צדדי המספרים לצורך אתחול מחסנית התרגילים
+			// הדבר נועד לתמוך בלוגיקת מניעת חזרות של תרגילים במחסנית
+			// לשם כך נבדוק אם המטריצה של לוח הכפל הנבחר ע"י המשתמש
+			// באמצעות בחירת טווחי המספרים ימין ושמאל מהווים מטריצה סימטרית
+			// כלומר שטווח מספרים באורך שווה לטווח המספרים ברוחב
+			// אם לא שווה ויש רוחב גדול מאורך, נהפוך את הטבלה,
+			// כלומר נעמיד את מלבן המטריצה כדי לכסות את הטווח הארוך בין הרוחב והאורך
+			// וכך ניצור כיסוי מלא של תרגילים תוך שמירת עיקרון מניעת חזרות
+			// ובהתאם לבחירת המשתמש בכמות מבחנים, מספר תריגילים במבחן והטווחים של המספרים
+			if(MAXNUMBER1 - MINNUMBER1 > MAXNUMBER2 - MINNUMBER2) {
+				minNumberLeft = MINNUMBER1;
+				maxNumberLeft = MAXNUMBER1;
+				minNumberRight = MINNUMBER2;
+				maxNumberRight = MAXNUMBER2;
+			} else {
+				minNumberLeft = MINNUMBER2;
+				maxNumberLeft = MAXNUMBER2;
+				minNumberRight = MINNUMBER1;
+				maxNumberRight = MAXNUMBER1;
+			}
 			// רוץ על טווחי המספרים שהוגדרו בתרגיל
 			// לולאה חיצונית למספר שמאלי (שורות)
-			for (y = MINNUMBERLEFT; y <= MAXNUMBERLEFT ; y++){  
+			for (y = minNumberLeft; y <= maxNumberLeft ; y++){
 				// לולאה פנימית למספר ימני (עמודות)
-				for (x = MINNUMBERRIGHT; x <= MAXNUMBERRIGHT ; x++){
+				for (x = minNumberRight; x <= maxNumberRight ; x++){
 					// אם אינדיקציה לסיבוב ראשון של אתחול
 					// אז דחוף מספר ראשון לשמאל ומספר שני לימין (אחרת החלף עבור חזרות במידת האפשר)
 					if (regularLoop==0) {
@@ -236,7 +260,7 @@ public class Main {
 			// הצג ציון סופי של בחינה אחת
 			
 			System.out.println("___________________________________________");
-			System.out.println("הציון שלך הוא: " + tziun * 100 / MAXQUESTIONS + "      ");
+			System.out.println("הציון שלך הוא: " + tziun * 100 / MAXQUESTIONS + "    ");
 			System.out.println("הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות");
 			System.out.println("לקח לך להשיב: " + secondsTest + " שניות");			
 			// תנאים לפרגון או המלצה לשיפור

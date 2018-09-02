@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class Main {
 
-	private static final int MAXTESTS = 5; // מקסימום מבחנים
+	private static final int MAXTESTS = 10; // מקסימום מבחנים
 	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
@@ -40,6 +40,7 @@ public class Main {
 			minNumberRight,// שווה ויש טווח רוחב מספרים גדול מטווח אורך
 			maxNumberRight,// במקרה זה, כדי לתמוך בהעדר חזרות על תרגילים, נעמיד את הטבלה בהחלפת סדר המספרים בתרגיל
 			numOfTargilim,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
+			numOfTargilimTemp,  // מונה כמות התרגילים באתחול תרגילים (מתאפס בכל סיבוב שהסתיימו כל אפשרויות התרגילים ללא חזרות)
 			regularLoop;  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
 	public static long secondsDiff, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
 			secondsTest,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
@@ -47,9 +48,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner console = new Scanner(System.in);
+		// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
-
-
+		// צובר תרגילים זמני - בסיום כל סיבוב כל האפשרויות - יתאפס לקבלת סדרת תרגילים חדשה
+		ArrayList<Integer[]> targilTemp = new ArrayList<Integer[]>();
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
 		System.out.println("       לוח הכפל של הדר") ;
@@ -97,11 +99,13 @@ public class Main {
 		// וכך ניצור כיסוי מלא של תרגילים תוך שמירת עיקרון מניעת חזרות
 		// ובהתאם לבחירת המשתמש בכמות מבחנים, מספר תריגילים במבחן והטווחים של המספרים
 		if(MAXNUMBER1 - MINNUMBER1 > MAXNUMBER2 - MINNUMBER2) {
+			// המספרים משמאל יעמדו לאורך ציר Y
 			minNumberLeft = MINNUMBER1;
 			maxNumberLeft = MAXNUMBER1;
 			minNumberRight = MINNUMBER2;
 			maxNumberRight = MAXNUMBER2;
 		} else {
+			// המספרים מימין יעמדו לאורך ציר Y
 			minNumberLeft = MINNUMBER2;
 			maxNumberLeft = MAXNUMBER2;
 			minNumberRight = MINNUMBER1;
@@ -120,16 +124,26 @@ public class Main {
 					// אז דחוף מספר ראשון לשמאל ומספר שני לימין (אחרת החלף עבור חזרות במידת האפשר)
 					if (regularLoop==0) {
 						// הצב במחסנית את הכפולה (שני המספרים) ואת התוצאה
-						targil.add(new Integer[] {y, x, x*y});
+						targilTemp.add(new Integer[] {y, x, x*y});
 
 						// אם אינדיקציה לסיבוב חדש (שני וכו) של אתחול
 						// אז החלף בין המספרים ודחוף מספר ראשון לימין ומספר שני לשמאל
 					} else if (regularLoop==1) {
 						// הצב במחסנית את הכפולה (שני המספרים) ואת התוצאה
-						targil.add(new Integer[] {x, y, x*y});
+						targilTemp.add(new Integer[] {x, y, x*y});
 					}
 					// קדם/עדכן את מספר התרגילים שהוכנסו למחסנית
 					numOfTargilim++ ;
+					numOfTargilimTemp++ ;
+					int w2 = maxNumberLeft - minNumberLeft + 1;
+					int w1 = factorial2(maxNumberLeft - minNumberLeft + 1);
+					// טיפול בסיום צבירת כל אפשרויות התרגילים - ערבוב, העברה לצובר כללי ואיפוס להמשך קליטה
+					if(numOfTargilimTemp == factorial2(maxNumberLeft - minNumberLeft + 1) || numOfTargilim == MAXTESTS*MAXQUESTIONS) {
+						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
+						targil.addAll(targilTemp);
+						targilTemp.clear();
+						numOfTargilimTemp = 0;
+					}
 					// אם תוצאת הכפולה שווה לכפולת מספר עמודה באותו מספר עמודה אז סיים את השורה
 					// כדי למנוע חזרה על תרגילים בהחלפת צדדי מספרי הכפולה
 					if(x*y==y*y) break;
@@ -152,7 +166,7 @@ public class Main {
 //			System.out.println("(" + e + ")   " + targil.get(e)[0] + " * " + targil.get(e)[1] + " = " + targil.get(e)[2]);
 //		}
 		// תערבב תרגילים אם ההגדרה היא 1
-		if(SHUFFLE == 1) Collections.shuffle(targil);
+//		if(SHUFFLE == 1) Collections.shuffle(targil);
 
 		// --- רוץ ברמת כל המבחנים (מספר מבחנים לסט אחד)  ----
 		do {
@@ -317,5 +331,16 @@ public class Main {
 			// בצע לולאה של 10 מבחנים או הקשת 0 ליציאה
 		} while(g < MAXTESTS && !(input==0));
 		console.close();
+	}
+
+	// פונקציה לחישוב עצרת
+	public static int factorial2 ( int nn )
+	{
+		int rr = 1;
+		for ( int ii = 1; ii <= nn; ii++ )
+		{
+			rr*=ii;
+		}
+		return rr;
 	}
 }

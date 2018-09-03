@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-/**
- * פרויקט לוח הכפל של הדרי
- */
+
+// פרויקט לוח הכפל של הדרי
+
 public class Main {
 
-	private static final int MAXTESTS = 10; // מקסימום מבחנים
+	private static final int MAXTESTS = 5; // מקסימום מבחנים
 	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
@@ -21,32 +21,33 @@ public class Main {
 	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
 
 	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
-	// ציור לוח הכפל
-	public static int y, //  מונה שורות
-			x, // מונה עמודות
 
-	// משחק הכפולות
-	k, // משחק הכפולות - מונה 10 תרגילים
-			num1,num2, // קבלת שני מספרים אקראיים למכפלה
-			input, // משחק הכפולות - קבלת קלט מהמשתמש
-			tziun, // צובר ציון ברמת מבחן אחד
-			g, // מונה 10 מבחנים
-			tziunAll, //  צובר ציון לכל המבחנים שנעשו
-			l, // מונה השהייה בין הגרלת מספרים לכפולות
-			i, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
-			s, // מונה מספר תרגילים עבור אתחול המשחק בתרגילים
-			minNumberLeft, // סדר המספרים האמיתי שירוץ על לולאת אתחול התרגילים
-			maxNumberLeft, // ההחלפה נועדה למקרה שמטריצת לוח הכפל שנבחרה אינה
-			minNumberRight,// שווה ויש טווח רוחב מספרים גדול מטווח אורך
-			maxNumberRight,// במקרה זה, כדי לתמוך בהעדר חזרות על תרגילים, נעמיד את הטבלה בהחלפת סדר המספרים בתרגיל
-			numOfTargilim,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
-			numOfTargilimTemp,  // מונה כמות התרגילים באתחול תרגילים (מתאפס בכל סיבוב שהסתיימו כל אפשרויות התרגילים ללא חזרות)
-			regularLoop;  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
-	public static long secondsDiff, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
-			secondsTest,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
-			secondsTestAll; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
 
 	public static void main(String[] args) {
+		
+		// ציור לוח הכפל
+		int y, //  מונה שורות
+			x, // מונה עמודות
+
+		// משחק הכפולות
+			k = 0, // משחק הכפולות - מונה 10 תרגילים
+			num1 = 0,num2 = 0, // קבלת שני מספרים אקראיים למכפלה
+			input = 0, // משחק הכפולות - קבלת קלט מהמשתמש
+			tziun = 0, // צובר ציון ברמת מבחן אחד
+			g = 0, // מונה 10 מבחנים
+			tziunAll = 0, //  צובר ציון לכל המבחנים שנעשו
+			i = 0, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
+			minNumberLeft = 0, // סדר המספרים האמיתי שירוץ על לולאת אתחול התרגילים
+			maxNumberLeft = 0, // ההחלפה נועדה למקרה שמטריצת לוח הכפל שנבחרה אינה
+			minNumberRight = 0,// שווה ויש טווח רוחב מספרים גדול מטווח אורך
+			maxNumberRight = 0,// במקרה זה, כדי לתמוך בהעדר חזרות על תרגילים, נעמיד את הטבלה בהחלפת סדר המספרים בתרגיל
+			numOfTargilim = 0,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
+			numOfTargilimTemp = 0,  // מונה כמות התרגילים באתחול תרגילים (מתאפס בכל סיבוב שהסתיימו כל אפשרויות התרגילים ללא חזרות)
+			regularLoop = 0;  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
+		long secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
+			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
+			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
+		
 		Scanner console = new Scanner(System.in);
 		// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
@@ -54,8 +55,8 @@ public class Main {
 		ArrayList<Integer[]> targilTemp = new ArrayList<Integer[]>();
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
-		System.out.println("       לוח הכפל של הדר") ;
-		System.out.println("---------------       ") ;
+		System.out.println("לוח הכפל של הדר") ;
+		System.out.println("---------------") ;
 
 		// לולאה חיצונית לציור 10 שורות
 
@@ -111,6 +112,9 @@ public class Main {
 			minNumberRight = MINNUMBER1;
 			maxNumberRight = MAXNUMBER1;
 		}
+        // קבל מספר התרגילים האפשריים ללא חזרות על מנת לערבב כל סיבוב כזה בנפרד
+        // ולמנוע חזרה על תרגילים קרוב מדי ככל שיש יותר תרגילים מקומבינציות
+        int NumberOftrgilimWithoutDuplicates = getNumberOftrgilimWithoutDuplicates(maxNumberLeft - minNumberLeft + 1);
 		// המטרה של אתחול התרגילים מראש הוא לבצע בקרה על כל התרגילים במכל המבחנים
 		// כדי למנוע חזרה על תרגילים שהיו באותו מבחן ובמבחנים אחרים באותו סט
 		// מלא מחסנית בתרגילים כמספר כמות תרגילים בכל מבחן ומספר המבחנים
@@ -135,10 +139,11 @@ public class Main {
 					// קדם/עדכן את מספר התרגילים שהוכנסו למחסנית
 					numOfTargilim++ ;
 					numOfTargilimTemp++ ;
-					int w2 = maxNumberLeft - minNumberLeft + 1;
-					int w1 = factorial2(maxNumberLeft - minNumberLeft + 1);
 					// טיפול בסיום צבירת כל אפשרויות התרגילים - ערבוב, העברה לצובר כללי ואיפוס להמשך קליטה
-					if(numOfTargilimTemp == factorial2(maxNumberLeft - minNumberLeft + 1) || numOfTargilim == MAXTESTS*MAXQUESTIONS) {
+					if(numOfTargilimTemp == NumberOftrgilimWithoutDuplicates ||
+                           numOfTargilim == MAXTESTS*MAXQUESTIONS) {
+					    // אם הגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
+                        // תתערבב המחסנית ותרוקן את התוצאה למחסנית הראשית ותתאפס
 						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
 						targil.addAll(targilTemp);
 						targilTemp.clear();
@@ -333,14 +338,13 @@ public class Main {
 		console.close();
 	}
 
-	// פונקציה לחישוב עצרת
-	public static int factorial2 ( int nn )
-	{
-		int rr = 1;
-		for ( int ii = 1; ii <= nn; ii++ )
-		{
-			rr*=ii;
-		}
-		return rr;
+
+	// פונקציה לחישוב מספר התרגילים ללא חזרות
+   	public static int getNumberOftrgilimWithoutDuplicates(int n) {
+		int sum = 0;
+	    for (int i=1;i<=n;i++) {
+		    sum=sum+i;
+	    }
+	    return sum;
 	}
 }

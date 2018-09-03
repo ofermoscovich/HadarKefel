@@ -114,7 +114,8 @@ public class Main {
 		}
         // קבל מספר התרגילים האפשריים ללא חזרות על מנת לערבב כל סיבוב כזה בנפרד
         // ולמנוע חזרה על תרגילים קרוב מדי ככל שיש יותר תרגילים מקומבינציות
-        int NumberOftrgilimWithoutDuplicates = getNumberOftrgilimWithoutDuplicates(maxNumberLeft - minNumberLeft + 1);
+        int NumberOfTargilimWithoutDuplicates =
+                getNumberOfTargilimWithoutDuplicates(maxNumberLeft - minNumberLeft + 1);
 		// המטרה של אתחול התרגילים מראש הוא לבצע בקרה על כל התרגילים במכל המבחנים
 		// כדי למנוע חזרה על תרגילים שהיו באותו מבחן ובמבחנים אחרים באותו סט
 		// מלא מחסנית בתרגילים כמספר כמות תרגילים בכל מבחן ומספר המבחנים
@@ -136,17 +137,20 @@ public class Main {
 						// הצב במחסנית את הכפולה (שני המספרים) ואת התוצאה
 						targilTemp.add(new Integer[] {x, y, x*y});
 					}
-					// קדם/עדכן את מספר התרגילים שהוכנסו למחסנית
+					// קדם/עדכן את מספר התרגילים שהוכנסו למחסניות
 					numOfTargilim++ ;
 					numOfTargilimTemp++ ;
 					// טיפול בסיום צבירת כל אפשרויות התרגילים - ערבוב, העברה לצובר כללי ואיפוס להמשך קליטה
-					if(numOfTargilimTemp == NumberOftrgilimWithoutDuplicates ||
+					if(numOfTargilimTemp == NumberOfTargilimWithoutDuplicates ||
                            numOfTargilim == MAXTESTS*MAXQUESTIONS) {
-					    // אם הגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
+					    // לאחר שהגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
                         // תתערבב המחסנית ותרוקן את התוצאה למחסנית הראשית ותתאפס
 						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
+						// שפוך ממחסנית זמנית למחסנית קבועה
 						targil.addAll(targilTemp);
+						// נקה מחסנית זמנית
 						targilTemp.clear();
+						// אפס צובר למחזנית זמנית
 						numOfTargilimTemp = 0;
 					}
 					// אם תוצאת הכפולה שווה לכפולת מספר עמודה באותו מספר עמודה אז סיים את השורה
@@ -340,7 +344,7 @@ public class Main {
 
 
 	// פונקציה לחישוב מספר התרגילים ללא חזרות
-   	public static int getNumberOftrgilimWithoutDuplicates(int n) {
+   	public static int getNumberOfTargilimWithoutDuplicates(int n) {
 		int sum = 0;
 	    for (int i=1;i<=n;i++) {
 		    sum=sum+i;

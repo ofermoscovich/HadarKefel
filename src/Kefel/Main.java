@@ -10,18 +10,17 @@ import java.util.Date;
 public class Main {
 
 	private static final int MAXTESTS = 5; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
+	private static final int MAXQUESTIONS = 2; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
-	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER1 = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER1 = 1; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER1 = 10; // מספר אקראי מקסימלי בתרגיל
 	// מספר ימני
-	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER2 = 1; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER2 = 10; // מספר אקראי מקסימלי בתרגיל
 
 	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
-
 
 	public static void main(String[] args) {
 		
@@ -125,13 +124,13 @@ public class Main {
 			for (y = minNumberLeft; y <= maxNumberLeft ; y++){
 				// לולאה פנימית למספר ימני (עמודות)
 				for (x = minNumberRight; x <= maxNumberRight ; x++){
-					// אם אינדיקציה לסיבוב ראשון של אתחול
+					// שליטה בתרגילים חוזרים - אם אינדיקציה לסיבוב ראשון של אתחול
 					// אז דחוף מספר ראשון לשמאל ומספר שני לימין (אחרת החלף עבור חזרות במידת האפשר)
 					if (regularLoop==0) {
 						// הצב במחסנית את הכפולה (שני המספרים) ואת התוצאה
 						targilTemp.add(new Integer[] {y, x, x*y});
 
-						// אם אינדיקציה לסיבוב חדש (שני וכו) של אתחול
+						// אם אינדיקציה לסיבוב do חדש (שני וכו) של אתחול
 						// אז החלף בין המספרים ודחוף מספר ראשון לימין ומספר שני לשמאל
 					} else if (regularLoop==1) {
 						// הצב במחסנית את הכפולה (שני המספרים) ואת התוצאה
@@ -146,7 +145,7 @@ public class Main {
 					    // לאחר שהגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
                         // תתערבב המחסנית ותרוקן את התוצאה למחסנית הראשית ותתאפס
 						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
-						// שפוך ממחסנית זמנית למחסנית קבועה
+						// שפוך מחסנית זמנית למחסנית קבועה
 						targil.addAll(targilTemp);
 						// נקה מחסנית זמנית
 						targilTemp.clear();
@@ -161,7 +160,7 @@ public class Main {
 				if(numOfTargilim == MAXTESTS*MAXQUESTIONS) break;
 			}
 			// במידה והסתיים אתחול כל התרגילים האפשריים לטווח הנתון ונשאר מקומות ריקים במכסה,
-			// כלומר אם טרם מולאה מכסת המחסנית) החל חזרות תוך החלפת מקומות המספרים
+			// כלומר אם טרם מולאה מכסת המחסנית, החל חזרות תוך החלפת מקומות המספרים
 			if (regularLoop==0) {
 				regularLoop = 1;
 			} else if (regularLoop==1) {
@@ -170,7 +169,7 @@ public class Main {
 			// המשך באתחול מחסנית התרגילים כל עוד לא הגעת למספר כולל מקסימלי של תרגילים לכל המבחנים
 		} while(numOfTargilim < MAXTESTS*MAXQUESTIONS );
 
-//		for (int e = 0; e<= MAXTESTS*MAXQUESTIONS;e++) {
+//		for (int e = 0; e < targil.size();e++) {
 //			//int bbb = targil.getFirst()[0] ;// + " * " + targil.getFirst() + " = " + targil.getFirst());
 //			System.out.println("(" + e + ")   " + targil.get(e)[0] + " * " + targil.get(e)[1] + " = " + targil.get(e)[2]);
 //		}
@@ -217,8 +216,7 @@ public class Main {
 						if(console.hasNextInt()){
 							input = console.nextInt();
 							isInputCorrect = true;
-						}
-						else{
+						} else{
 							System.out.print("  הקלדה שגויה, הקלידי שוב ");
 							isInputCorrect = false;
 							console.next();
@@ -318,8 +316,7 @@ public class Main {
 					if(console.hasNextInt()){
 						input = console.nextInt();
 						isInputCorrect = true;
-					}
-					else{
+					} else{
 						System.out.print("  הקלדה שגויה, הקלידי שוב ");
 						isInputCorrect = false;
 						console.next();
@@ -341,7 +338,6 @@ public class Main {
 		} while(g < MAXTESTS && !(input==0));
 		console.close();
 	}
-
 
 	// פונקציה לחישוב מספר התרגילים ללא חזרות
    	public static int getNumberOfTargilimWithoutDuplicates(int n) {

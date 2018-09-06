@@ -10,15 +10,15 @@ import java.util.Date;
 public class Main {
 
 	private static final int MAXTESTS = 5; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 2; // מקסמום תרגילים למבחן
+	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
-	private static final int MINNUMBER1 = 1; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER1 = 10; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER1 = 9; // מספר אקראי מקסימלי בתרגיל
 	// מספר ימני
-	private static final int MINNUMBER2 = 1; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER2 = 10; // מספר אקראי מקסימלי בתרגיל
+	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
+	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
 
 	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
 
@@ -98,7 +98,7 @@ public class Main {
 		// כלומר נעמיד את מלבן המטריצה כדי לכסות את הטווח הארוך בין הרוחב והאורך
 		// וכך ניצור כיסוי מלא של תרגילים תוך שמירת עיקרון מניעת חזרות
 		// ובהתאם לבחירת המשתמש בכמות מבחנים, מספר תריגילים במבחן והטווחים של המספרים
-		if(MAXNUMBER1 - MINNUMBER1 > MAXNUMBER2 - MINNUMBER2) {
+		if(MAXNUMBER1 - MINNUMBER1 >= MAXNUMBER2 - MINNUMBER2) {
 			// המספרים משמאל יעמדו לאורך ציר Y
 			minNumberLeft = MINNUMBER1;
 			maxNumberLeft = MAXNUMBER1;
@@ -141,33 +141,36 @@ public class Main {
 					numOfTargilimTemp++ ;
 					// טיפול בסיום צבירת כל אפשרויות התרגילים - ערבוב, העברה לצובר כללי ואיפוס להמשך קליטה
 					if(numOfTargilimTemp == NumberOfTargilimWithoutDuplicates ||
-                           numOfTargilim == MAXTESTS*MAXQUESTIONS) {
-					    // לאחר שהגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
+                            (numOfTargilim > ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) &&
+                                    numOfTargilim%(MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1) == 0)) {
+ 					    // לאחר שהגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
                         // תתערבב המחסנית ותרוקן את התוצאה למחסנית הראשית ותתאפס
 						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
-						// שפוך מחסנית זמנית למחסנית קבועה
+						// שפוך הכל ממחסנית זמנית למחסנית קבועה
+                        // בסיבוב אחרון יתכן שיישפכו למחסנית יותר תרגילים ממה שיוצגו
+                        // ובעתיד אפשר להגביל למספר התרגילים שנותרו למילוי המכסה בלבד
+                        // בכל מקרה, המערכת בהמשך לא תציג יותר תרגילים מהמכסה שקבע המשתמש
 						targil.addAll(targilTemp);
 						// נקה מחסנית זמנית
 						targilTemp.clear();
-						// אפס צובר למחזנית זמנית
+						// אפס צובר למחסנית זמנית
 						numOfTargilimTemp = 0;
 					}
 					// אם תוצאת הכפולה שווה לכפולת מספר עמודה באותו מספר עמודה אז סיים את השורה
 					// כדי למנוע חזרה על תרגילים בהחלפת צדדי מספרי הכפולה
 					if(x*y==y*y) break;
-					if(numOfTargilim == MAXTESTS*MAXQUESTIONS) break;
 				}
-				if(numOfTargilim == MAXTESTS*MAXQUESTIONS) break;
 			}
-			// במידה והסתיים אתחול כל התרגילים האפשריים לטווח הנתון ונשאר מקומות ריקים במכסה,
-			// כלומר אם טרם מולאה מכסת המחסנית, החל חזרות תוך החלפת מקומות המספרים
+			// במידה והסתיים אתחול כל התרגילים האפשריים לטווח הנתון ונשארו מקומות ריקים במכסה,
+			// כלומר אם טרם מולאה מכסת המחסנית, בצע חזרות על הכפולות תוך החלפת מקומות המספרים
 			if (regularLoop==0) {
 				regularLoop = 1;
 			} else if (regularLoop==1) {
 				regularLoop = 0;
 			}
 			// המשך באתחול מחסנית התרגילים כל עוד לא הגעת למספר כולל מקסימלי של תרגילים לכל המבחנים
-		} while(numOfTargilim < MAXTESTS*MAXQUESTIONS );
+		} while(numOfTargilim < ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) ||
+                (numOfTargilim < MAXQUESTIONS*MAXTESTS));
 
 //		for (int e = 0; e < targil.size();e++) {
 //			//int bbb = targil.getFirst()[0] ;// + " * " + targil.getFirst() + " = " + targil.getFirst());

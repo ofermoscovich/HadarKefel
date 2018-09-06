@@ -143,8 +143,8 @@ public class Main {
 					if(numOfTargilimTemp == NumberOfTargilimWithoutDuplicates ||
                             (numOfTargilim > ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) &&
                                     numOfTargilim%(MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1) == 0)) {
- 					    // לאחר שהגענו לסוף הקומבינציות או לסוף רשימת התרגילים למבחן
-                        // תתערבב המחסנית ותרוקן את התוצאה למחסנית הראשית ותתאפס
+ 					    // מאחר שהגענו לסוף הקומבינציות או לסוף מילוי מכסת התרגילים למבחן ומעבר אולי,
+                        // תתערבב המחסנית הזמנית ותרוקן את התוצאה למחסנית הראשית והזמנית תתאפס
 						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
 						// שפוך הכל ממחסנית זמנית למחסנית קבועה
                         // בסיבוב אחרון יתכן שיישפכו למחסנית יותר תרגילים ממה שיוצגו
@@ -169,8 +169,7 @@ public class Main {
 				regularLoop = 0;
 			}
 			// המשך באתחול מחסנית התרגילים כל עוד לא הגעת למספר כולל מקסימלי של תרגילים לכל המבחנים
-		} while(numOfTargilim < ((MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1)) ||
-                (numOfTargilim < MAXQUESTIONS*MAXTESTS));
+		} while(numOfTargilim < MAXQUESTIONS*MAXTESTS);
 
 //		for (int e = 0; e < targil.size();e++) {
 //			//int bbb = targil.getFirst()[0] ;// + " * " + targil.getFirst() + " = " + targil.getFirst());

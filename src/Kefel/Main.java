@@ -204,6 +204,9 @@ public class Main {
 				// מדוד זמן התחלה
 				Date now1 = new Date();
 
+                // אתחול אינדיקציה לבדוק אם היתה תשובה לא נכונה
+                boolean falseAnswer = false;
+
 				// לולאת מחזוריות הזדמנויות להשיב במקרה ותשובה אינה נכונה
 				// אם התשובה נכונה, הלולאה תפסיק ונעבור לתרגיל הבא
 				// --- רמת שאלה במבחן ----
@@ -250,6 +253,9 @@ public class Main {
 						break;
 					} else {
 						// טיפול בתשובה לא נכונה
+
+                        // אתחול אינדיקציה שהיתה תשובה לא נכונה
+                        falseAnswer = true;
 						// אם התשובה אינה נכונה ציין זאת, תאפשר הזדמנות נוספת ובסוף הצג תשובה נכונה
 						// אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
 						if (i < MAXTRIES) {
@@ -270,6 +276,14 @@ public class Main {
 						}
 					}
 				}
+                if (falseAnswer) {
+                    // תאגור תרגיל שלא הצליח לצורך הצגתו בסיכום
+                    // האיבר השלישי במארך אינו התשובה הנכונה אלא מספר הניסיונות
+                    targilTemp.add(new Integer[] {num1, num2, i});
+                    // אתחול אינדיקציה חזרה לברירת מחדל (לבדוק אם היתה תשובה לא נכונה)
+                    falseAnswer = true;
+
+                } //else {
 				// צבור את שניות מתן התשובה לצובר המבחן
 				secondsTest += secondsDiff ;
 			}
@@ -329,15 +343,28 @@ public class Main {
 				//tziunAll = 0;
 				//secondsTestAll = 0; // לא חובה לאפס כי זה נתון סופי
 			}
-			// תנאי פירגון בסוף הסט
-			if (g == MAXTESTS && tziunAll * 100 / MAXQUESTIONS / g == 100) {
-				System.out.println("===============================================") ;
-				System.out.println("אבא, קיבלתי 100!!!") ;
-				System.out.println("תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
-				System.out.println("===============================================") ;
-			}
 			// בצע לולאה של 10 מבחנים או הקשת 0 ליציאה
 		} while(g < MAXTESTS && !(input==0));
+
+        // תנאי פירגון בסוף הסט
+        if (tziunAll * 100 / MAXQUESTIONS / g == 100) {
+            System.out.println("===============================================") ;
+            System.out.println("אבא, קיבלתי 100!!!") ;
+            System.out.println("תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
+            System.out.println("===============================================") ;
+        } else {
+            System.out.println("תרגילים שצריך לעבוד עליהם");
+            System.out.println("-------------------------");
+            // רשימת תרגילים שהמבצע התקשה בהם
+            for (int iii = 0;iii < targilTemp.size();iii++) {
+                num1 = targilTemp.get(iii)[0];
+                num2 = targilTemp.get(iii)[1];
+                int num3 = targilTemp.get(iii)[2];
+
+                System.out.println(num1 + " x " + num2 + " = " + num1*num2 + " | ניסיון " + num3 + " | ");
+            }
+        }
+
 		console.close();
 	}
 

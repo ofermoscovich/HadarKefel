@@ -42,10 +42,11 @@ public class Main {
 			maxNumberRight = 0,// במקרה זה, כדי לתמוך בהעדר חזרות על תרגילים, נעמיד את הטבלה בהחלפת סדר המספרים בתרגיל
 			numOfTargilim = 0,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
 			numOfTargilimTemp = 0,  // מונה כמות התרגילים באתחול תרגילים (מתאפס בכל סיבוב שהסתיימו כל אפשרויות התרגילים ללא חזרות)
-			regularLoop = 0;  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
-		long secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
+			regularLoop = 0,  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
+		    secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
 			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
 			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
+        long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
 		
 		Scanner console = new Scanner(System.in);
 		// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
@@ -235,7 +236,8 @@ public class Main {
 						// עצור מדידת זמן
 						Date now2 = new Date();
 						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-						secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
+						secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+                        secondsDiff = (int)secondsDiffLong;
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
 						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
@@ -272,7 +274,8 @@ public class Main {
 							//LocalDateTime now2 = LocalDateTime.now();
 							Date now2 = new Date();
 							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-							secondsDiff = (now2.getTime() - now1.getTime()) / 1000;
+							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+                            secondsDiff = (int)secondsDiffLong;
 						}
 					}
 				}
@@ -281,9 +284,12 @@ public class Main {
                     // האיבר השלישי במארך אינו התשובה הנכונה אלא מספר הניסיונות
                     targilTemp.add(new Integer[] {num1, num2, i});
                     // אתחול אינדיקציה חזרה לברירת מחדל (לבדוק אם היתה תשובה לא נכונה)
-                    falseAnswer = true;
+                    // falseAnswer = false;
 
-                } //else {
+                } else if (secondsDiff > 6) {
+                    // אם לקח לענות יותר מ 6 שניות התרגיל יצטבר לדוח התרגילים לשיפור
+                    targilTemp.add(new Integer[] {num1, num2, secondsDiff * (-1) });
+                }
 				// צבור את שניות מתן התשובה לצובר המבחן
 				secondsTest += secondsDiff ;
 			}
@@ -314,7 +320,10 @@ public class Main {
 
 			// הצג נתונים סופיים של כל הבחינות עד עתה
 
-			System.out.println("___________________________________________");
+            System.out.println();
+			System.out.println("__________________________________________");
+            System.out.println("_________________ סיכום __________________");
+            System.out.println("__________________________________________");
 			if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
 				System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + tziunAll * 100 / MAXQUESTIONS / g ) ;
 				System.out.println("זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;
@@ -356,15 +365,19 @@ public class Main {
             System.out.println("תרגילים שצריך לעבוד עליהם");
             System.out.println("-------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם
-            for (int iii = 0;iii < targilTemp.size();iii++) {
-                num1 = targilTemp.get(iii)[0];
-                num2 = targilTemp.get(iii)[1];
-                int num3 = targilTemp.get(iii)[2];
-
-                System.out.println(num1 + " x " + num2 + " = " + num1*num2 + " | ניסיון " + num3 + " | ");
+            for (int s = 0;s < targilTemp.size();s++) {
+                num1 = targilTemp.get(s)[0];
+                num2 = targilTemp.get(s)[1];
+                int num3 = targilTemp.get(s)[2];
+                if (num3 > 0) {
+                    // הצגת תרגיל עם בעיית פיתרון שגוי
+                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | ניסיון " + num3 + " | ");
+                } else {
+                    // הצגת תרגיל עם בעיית זמן הפיתרון
+                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | שניות " + num3 * (-1) + " | ");
+                }
             }
         }
-
 		console.close();
 	}
 

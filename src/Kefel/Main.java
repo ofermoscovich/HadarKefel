@@ -322,8 +322,10 @@ public class Main {
 
             System.out.println();
 			System.out.println("__________________________________________");
-            System.out.println("_________________ סיכום __________________");
-            System.out.println("__________________________________________");
+			if (g == MAXTESTS) { // להדפיס דוח סיכום כללי רק למבחן האחרון
+                System.out.println("_________________ סיכום __________________");
+                System.out.println("__________________________________________");
+            }
 			if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
 				System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + tziunAll * 100 / MAXQUESTIONS / g ) ;
 				System.out.println("זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;

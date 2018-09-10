@@ -21,7 +21,7 @@ public class Main {
 
 	private static final int SHUFFLE = 2;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
 
-    private static final int TIMETOANSWERFORREPORT = 5; // תרגילים שלקח יותר ממספר השניות שצוין יוספו לדוח סיכום לשיפור
+    private static final int TIMETOANSWERFORREPORT = 5; // תרגילים שלקחו יותר ממספר השניות שצוין יוספו לדוח סיכום לשיפור
     private static final int TIMETOANSWERFORGOODFEEDBACK = 3; // זמן לפתרון תרגיל לשם ציון בהודעת עידוד מיד עם קבלת תשובה
 
 	public static void main(String[] args) {
@@ -273,7 +273,6 @@ public class Main {
 							// גלה תשובה בניסיון שלישי
 							System.out.println("התשובה הנכונה היא: " + num1*num2);
 							// עצור מדידת זמן
-							//LocalDateTime now2 = LocalDateTime.now();
 							Date now2 = new Date();
 							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
 							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
@@ -287,7 +286,6 @@ public class Main {
                     targilTemp.add(new Integer[] {num1, num2, i});
                     // אתחול אינדיקציה חזרה לברירת מחדל (לבדוק אם היתה תשובה לא נכונה)
                     // falseAnswer = false;
-
                 } else if (secondsDiff > TIMETOANSWERFORREPORT) {
                     // אם לקח לענות יותר מ 6 שניות התרגיל יצטבר לדוח התרגילים לשיפור
                     targilTemp.add(new Integer[] {num1, num2, secondsDiff * (-1) });
@@ -365,7 +363,8 @@ public class Main {
             System.out.println("אבא, קיבלתי 100!!!") ;
             System.out.println("תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
             System.out.println("===============================================") ;
-        } else {
+        }
+        if(targilTemp.size() > 0) {
             System.out.println("תרגילים שצריך לעבוד עליהם");
             System.out.println("-------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-
 // פרויקט לוח הכפל של הדרי
 
 public class Main {
@@ -20,10 +19,13 @@ public class Main {
 	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
 	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
 
-	private static final int SHUFFLE = 1;   // לערבב תרגילים: 1 כן;0 לא
+	private static final int SHUFFLE = 2;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
+
+    private static final int TIMETOANSWERFORREPORT = 5; // תרגילים שלקח יותר ממספר השניות שצוין יוספו לדוח סיכום לשיפור
+    private static final int TIMETOANSWERFORGOODFEEDBACK = 3; // זמן לפתרון תרגיל לשם ציון בהודעת עידוד מיד עם קבלת תשובה
 
 	public static void main(String[] args) {
-		
+
 		// ציור לוח הכפל
 		int y, //  מונה שורות
 			x, // מונה עמודות
@@ -146,7 +148,9 @@ public class Main {
                                     numOfTargilim%(MAXNUMBER1 - MINNUMBER1+1) * (MAXNUMBER2 - MINNUMBER2+1) == 0)) {
  					    // מאחר שהגענו לסוף הקומבינציות או לסוף מילוי מכסת התרגילים למבחן ומעבר אולי,
                         // תתערבב המחסנית הזמנית ותרוקן את התוצאה למחסנית הראשית והזמנית תתאפס
-						if(SHUFFLE == 1) Collections.shuffle(targilTemp);
+                        for(int p = 1;p<=SHUFFLE;p++) {
+                            Collections.shuffle(targilTemp);
+                        }
 						// שפוך הכל ממחסנית זמנית למחסנית קבועה
                         // בסיבוב אחרון יתכן שיישפכו למחסנית יותר תרגילים ממה שיוצגו
                         // ובעתיד אפשר להגביל למספר התרגילים שנותרו למילוי המכסה בלבד
@@ -176,8 +180,6 @@ public class Main {
 //			//int bbb = targil.getFirst()[0] ;// + " * " + targil.getFirst() + " = " + targil.getFirst());
 //			System.out.println("(" + e + ")   " + targil.get(e)[0] + " * " + targil.get(e)[1] + " = " + targil.get(e)[2]);
 //		}
-		// תערבב תרגילים אם ההגדרה היא 1
-//		if(SHUFFLE == 1) Collections.shuffle(targil);
 
 		// --- רוץ ברמת כל המבחנים (מספר מבחנים לסט אחד)  ----
 		do {
@@ -241,7 +243,7 @@ public class Main {
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
 						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
-						if (secondsDiff < 4 ) {
+						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
 							System.out.print("   הדרי מהירה - כל הכבוד!!!");
 						}
 						System.out.println(); // רד שורה
@@ -286,7 +288,7 @@ public class Main {
                     // אתחול אינדיקציה חזרה לברירת מחדל (לבדוק אם היתה תשובה לא נכונה)
                     // falseAnswer = false;
 
-                } else if (secondsDiff > 6) {
+                } else if (secondsDiff > TIMETOANSWERFORREPORT) {
                     // אם לקח לענות יותר מ 6 שניות התרגיל יצטבר לדוח התרגילים לשיפור
                     targilTemp.add(new Integer[] {num1, num2, secondsDiff * (-1) });
                 }
@@ -368,12 +370,12 @@ public class Main {
             System.out.println("-------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם
             for (int s = 0;s < targilTemp.size();s++) {
-                num1 = targilTemp.get(s)[0];
-                num2 = targilTemp.get(s)[1];
-                int num3 = targilTemp.get(s)[2];
+                num1 = targilTemp.get(s)[0]; // מספר שמאלי
+                num2 = targilTemp.get(s)[1]; // מספר ימני
+                int num3 = targilTemp.get(s)[2]; // אם חיובי: אוגר מספר ניסיונות לאחר תשובה שגויה ; אם שלילי: אוגר תרגילים שלקח זמן רב לפתור
                 if (num3 > 0) {
                     // הצגת תרגיל עם בעיית פיתרון שגוי
-                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | ניסיון " + num3 + " | ");
+                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | ניסיון " + num3 + " |* ");
                 } else {
                     // הצגת תרגיל עם בעיית זמן הפיתרון
                     System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | שניות " + num3 * (-1) + " | ");

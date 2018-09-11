@@ -8,14 +8,22 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../libraries/freetts-1.2.2-bin/freetts-1.2/lib" />
+          <root url="jar://$MODULE_DIR$/../libraries/freetts-1.2.2-bin/freetts-1.2/lib/freetts.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../libraries/freetts-1.2.2-bin/freetts-1.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libraries/freetts-1.2.2-bin/freetts-1.2/lib/cmu_us_kal.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>

@@ -4,8 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+
 // פרויקט לוח הכפל של הדרי
 // Speeching using FreeTTS
+
+// Download FreeTTS from here: https://sourceforge.net/projects/freetts/files/
+// More information here: https://freetts.sourceforge.io/
+// You need to add 2 libraries to make the speech works:
+//  \freetts-1.2.2-bin\freetts-1.2\lib\cmu_us_kal.jar
+//  \freetts-1.2.2-bin\freetts-1.2\lib\freetts.jar
 
 public class Main {
 
@@ -26,6 +35,8 @@ public class Main {
     private static final int TIMETOANSWERFORGOODFEEDBACK = 3; // זמן לפתרון תרגיל לשם ציון בהודעת עידוד מיד עם קבלת תשובה
 
 	private static final int WITHSPEECH = 1; // 1 - עם דיבור ; 0 - בלי דיבור
+
+	private static final String VOICENAME_kevin = "kevin";
 
 	public static void main(String[] args) {
 
@@ -52,8 +63,8 @@ public class Main {
 			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
 			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
         long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
-
-		FreeTTS freeTTS; // speach to text object
+		Date now1 = null,now2 = null;		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
+		//FreeTTS freeTTS; // speach to text object
 
 		Scanner console = new Scanner(System.in);
 		// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
@@ -211,9 +222,6 @@ public class Main {
 				// הסר תרגיל מהרשימה למניעת חזרתו
 				targil.remove(0);
 
-				// מדוד זמן התחלה
-				Date now1 = new Date();
-
                 // אתחול אינדיקציה לבדוק אם היתה תשובה לא נכונה
                 boolean falseAnswer = false;
 
@@ -226,8 +234,12 @@ public class Main {
 
 					// השמע תרגיל
 					if(WITHSPEECH > 0) {
-						freeTTS = new FreeTTS(num1 + "kkkkafful" + num2);
-						freeTTS.speak();
+					    speak(num1 + "kkkkafful" + num2);
+					}
+
+					if (i == 1) {
+						// מדוד זמן התחלה
+						now1 = new Date();
 					}
 
 					// קבל קלט תשובה מהמשתמש
@@ -249,16 +261,16 @@ public class Main {
 					if (input==num1*num2){
 						// טיפול בתשובה נכונה
 						// עצור מדידת זמן
-						Date now2 = new Date();
+						now2 = new Date();
 						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
 						secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
                         secondsDiff = (int)secondsDiffLong;
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
 						if(WITHSPEECH > 0) {
-							freeTTS = new FreeTTS("correct");
-							freeTTS.speak();
-						}
+                            speak("correct");
+                        }
+
 						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
 						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
 							System.out.print("   הדרי מהירה - כל הכבוד!!!");
@@ -284,8 +296,7 @@ public class Main {
 							System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
 
 							if(WITHSPEECH > 0) {
-								freeTTS = new FreeTTS("wrong answer");
-								freeTTS.speak();
+								speak("wrong answer");
 							}
 						} else if (i==MAXTRIES) {
 							// בניסיון הרביעי והאחרון הצג הודעה זו
@@ -295,7 +306,7 @@ public class Main {
 							// גלה תשובה בניסיון שלישי
 							System.out.println("התשובה הנכונה היא: " + num1*num2);
 							// עצור מדידת זמן
-							Date now2 = new Date();
+							now2 = new Date();
 							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
 							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
                             secondsDiff = (int)secondsDiffLong;
@@ -405,8 +416,7 @@ public class Main {
         }
 		console.close();
 		if (WITHSPEECH > 0) {
-			freeTTS = new FreeTTS("end of test");
-			freeTTS.speak();
+			speak("end of test");
 		}
 	}
 
@@ -417,5 +427,14 @@ public class Main {
 		    sum=sum+i;
 	    }
 	    return sum;
+	}
+
+	// פונקציה שתגרום למחשב לאמר מה שכתוב
+	public static void speak(String text) {
+		Voice voice;
+		VoiceManager voiceManager = VoiceManager.getInstance();
+		voice = voiceManager.getVoice(VOICENAME_kevin);
+		voice.allocate();
+		voice.speak(text);
 	}
 }

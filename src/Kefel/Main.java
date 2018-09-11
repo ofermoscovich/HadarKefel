@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 
 // פרויקט לוח הכפל של הדרי
+// Speeching using FreeTTS
 
 public class Main {
 
@@ -23,6 +24,8 @@ public class Main {
 
     private static final int TIMETOANSWERFORREPORT = 5; // תרגילים שלקחו יותר ממספר השניות שצוין יוספו לדוח סיכום לשיפור
     private static final int TIMETOANSWERFORGOODFEEDBACK = 3; // זמן לפתרון תרגיל לשם ציון בהודעת עידוד מיד עם קבלת תשובה
+
+	private static final int WITHSPEECH = 1; // 1 - עם דיבור ; 0 - בלי דיבור
 
 	public static void main(String[] args) {
 
@@ -49,12 +52,16 @@ public class Main {
 			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
 			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
         long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
-		
+
+		FreeTTS freeTTS; // speach to text object
+
 		Scanner console = new Scanner(System.in);
 		// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
 		// צובר תרגילים זמני - בסיום כל סיבוב כל האפשרויות - יתאפס לקבלת סדרת תרגילים חדשה
 		ArrayList<Integer[]> targilTemp = new ArrayList<Integer[]>();
+
+		System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
 		System.out.println("לוח הכפל של הדר") ;
@@ -217,6 +224,12 @@ public class Main {
 					// הדפס תרגיל
 					System.out.print("(" + k + ")   " + num1 + " x " + num2 + " = ");
 
+					// השמע תרגיל
+					if(WITHSPEECH > 0) {
+						freeTTS = new FreeTTS(num1 + "kkkkafful" + num2);
+						freeTTS.speak();
+					}
+
 					// קבל קלט תשובה מהמשתמש
 					boolean isInputCorrect = true;
 					do{
@@ -242,6 +255,10 @@ public class Main {
                         secondsDiff = (int)secondsDiffLong;
 						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
 						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
+						if(WITHSPEECH > 0) {
+							freeTTS = new FreeTTS("correct");
+							freeTTS.speak();
+						}
 						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
 						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
 							System.out.print("   הדרי מהירה - כל הכבוד!!!");
@@ -265,6 +282,11 @@ public class Main {
 						if (i < MAXTRIES) {
 							// עד 4 ניסיונות כושלים הצג הודעה זו
 							System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
+
+							if(WITHSPEECH > 0) {
+								freeTTS = new FreeTTS("wrong answer");
+								freeTTS.speak();
+							}
 						} else if (i==MAXTRIES) {
 							// בניסיון הרביעי והאחרון הצג הודעה זו
 							System.out.println("תשובה לא נכונה");
@@ -382,6 +404,10 @@ public class Main {
             }
         }
 		console.close();
+		if (WITHSPEECH > 0) {
+			freeTTS = new FreeTTS("end of test");
+			freeTTS.speak();
+		}
 	}
 
 	// פונקציה לחישוב מספר התרגילים ללא חזרות

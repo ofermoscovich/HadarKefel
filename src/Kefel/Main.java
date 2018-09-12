@@ -243,18 +243,7 @@ public class Main {
 					}
 
 					// קבל קלט תשובה מהמשתמש
-					boolean isInputCorrect = true;
-					do{
-						// בדיקה לוודא שיוקלד רק מספר
-						if(console.hasNextInt()){
-							input = console.nextInt();
-							isInputCorrect = true;
-						} else{
-							System.out.print("  הקלדה שגויה, הקלידי שוב ");
-							isInputCorrect = false;
-							console.next();
-						}
-					} while(isInputCorrect == false);
+					input = getAnswer(console);
 
 					// בצע בדיקת נכונות התשובה והצג מסקנה
 					// אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
@@ -370,18 +359,7 @@ public class Main {
 				System.out.println("להמשך הקש 1; לסיום הקש 0") ;
 
 				// קבל קלט תשובה מהמשתמש (כפילות לפונקציה)
-				boolean isInputCorrect = true;
-				do{
-					// בדיקה לוודא שיוקלד רק מספר
-					if(console.hasNextInt()){
-						input = console.nextInt();
-						isInputCorrect = true;
-					} else{
-						System.out.print("  הקלדה שגויה, הקלידי שוב ");
-						isInputCorrect = false;
-						console.next();
-					}
-				} while(isInputCorrect == false);
+				input = getAnswer(console);
 				// אפס צובר כל המבחנים, את צובר כל זמן במחינה ואת צובר כל זמן 10 הבחינות,
 				secondsTest = 0;
 				//tziunAll = 0;
@@ -418,6 +396,24 @@ public class Main {
 		if (WITHSPEECH > 0) {
 			speak("end of test");
 		}
+	}
+
+	// פונקציה לקבלת קלט מהמשתמש
+	public static int getAnswer(Scanner console) {
+		boolean isInputCorrect = true;
+		int input = 0;
+		do{
+			// בדיקה לוודא שיוקלד רק מספר
+			if(console.hasNextInt()){
+				input = console.nextInt();
+				isInputCorrect = true;
+			} else{
+				System.out.print("  הקלדה שגויה, הקלידי שוב ");
+				isInputCorrect = false;
+				console.next();
+			}
+		} while(isInputCorrect == false);
+		return input;
 	}
 
 	// פונקציה לחישוב מספר התרגילים ללא חזרות

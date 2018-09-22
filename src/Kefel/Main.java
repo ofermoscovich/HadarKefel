@@ -6,6 +6,10 @@ import java.util.Date;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.Font;
+import java.awt.Dimension;
 
 // פרויקט לוח הכפל של הדרי
 // Speeching using FreeTTS
@@ -18,25 +22,67 @@ import com.sun.speech.freetts.VoiceManager;
 
 public class Main {
 
-	private static final int MAXTESTS = 5; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 8; // מקסמום תרגילים למבחן
+	private static final int MAXTESTS = 10; // מקסימום מבחנים
+	private static final int MAXQUESTIONS = 10; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
 	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER1 = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER1 = 11; // מספר אקראי מקסימלי בתרגיל
 	// מספר ימני
 	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER2 = 11; // מספר אקראי מקסימלי בתרגיל
 
-	private static final int SHUFFLE = 2;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
+	private static final int SHUFFLE = 5;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
 
     private static final int TIMETOANSWERFORREPORT = 5; // תרגילים שלקחו יותר ממספר השניות שצוין יוספו לדוח סיכום לשיפור
     private static final int TIMETOANSWERFORGOODFEEDBACK = 3; // זמן לפתרון תרגיל לשם ציון בהודעת עידוד מיד עם קבלת תשובה
 
-	private static final int WITHSPEECH = 1; // 1 - עם דיבור ; 0 - בלי דיבור
+	private static final int WITHSPEECH = 0; // 1 - עם דיבור ; 0 - בלי דיבור
 
 	private static final String VOICENAME_kevin = "kevin";
+
+    private static final boolean CONSOLEVISIBLE = true;
+
+    private static JFrame fram;
+    private static JLabel labelTargil;
+    private static JTextField textField;
+    private static Font font;
+    private static Dimension preferredSize;
+
+	// constructor
+	Main(){
+		fram=new JFrame("משחקים של הדר");//creating instance of JFrame
+		labelTargil=new JLabel();
+        textField=new JTextField();
+
+        font = new Font("SansSerif", Font.BOLD, 48);
+        labelTargil.setFont(font);
+        textField.setFont(font);
+
+
+		JButton button=new JButton("אישור");//creating instance of JButton
+
+        fram.setSize(500,500);//400 width and 500 height
+        labelTargil.setBounds(50,50,350, 50);
+        textField.setBounds(0,50, 40,50);
+		button.setBounds(130,400,100, 40);
+
+		// אירוע לחיצת כפתור
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				textField.setText("תשובה נכונה");
+			}
+		});
+
+		fram.add(button);//adding button in JFrame
+		fram.add(textField);
+		fram.add(labelTargil);
+
+
+		fram.setLayout(null);//using no layout managers
+		fram.setVisible(CONSOLEVISIBLE);//making the frame visible
+	}
 
 	public static void main(String[] args) {
 
@@ -71,6 +117,8 @@ public class Main {
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
 		// צובר תרגילים זמני - בסיום כל סיבוב כל האפשרויות - יתאפס לקבלת סדרת תרגילים חדשה
 		ArrayList<Integer[]> targilTemp = new ArrayList<Integer[]>();
+
+		new Main();
 
 		System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 		//=========== ציור לוח הכפל ===========
@@ -230,9 +278,17 @@ public class Main {
 				// --- רמת שאלה במבחן ----
 				for (i = 1; i <= MAXTRIES; i++){
 					// הדפס תרגיל
-					System.out.print("(" + k + ")   " + num1 + " x " + num2 + " = ");
+					String targilText = "(" + k + ")   " + num1 + " x " + num2 + " = ";
+					System.out.print(targilText);
+					labelTargil.setText(targilText);
+                    preferredSize = labelTargil.getPreferredSize();
+                    preferredSize.width = (int)(preferredSize.width*1.1);
+                    labelTargil.setPreferredSize(preferredSize);
 
-					// השמע תרגיל
+                    textField.setBounds(labelTargil.getX() + preferredSize.width,50,100,50);
+
+
+                    // השמע תרגיל
 					if(WITHSPEECH > 0) {
 					    speak(num1 + "kkkkafful" + num2);
 					}

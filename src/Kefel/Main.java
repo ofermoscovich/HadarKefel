@@ -1,4 +1,5 @@
 package Kefel;
+import java.awt.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +9,6 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.Font;
-import java.awt.Dimension;
 
 // פרויקט לוח הכפל של הדרי
 // Speeching using FreeTTS
@@ -22,8 +21,8 @@ import java.awt.Dimension;
 
 public class Main {
 
-	private static final int MAXTESTS = 10; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 10; // מקסמום תרגילים למבחן
+	private static final int MAXTESTS = 2; // מקסימום מבחנים
+	private static final int MAXQUESTIONS = 3; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
@@ -44,44 +43,55 @@ public class Main {
 
     private static final boolean CONSOLEVISIBLE = true;
 
-    private static JFrame fram;
+    private static JFrame frame;
     private static JLabel labelTargil;
     private static JTextField textField;
     private static Font font;
     private static Dimension preferredSize;
 
-	// constructor
+    //AnswerDetails answerDetails = new AnswerDetails();
+
+    // constructor
 	Main(){
-		fram=new JFrame("משחקים של הדר");//creating instance of JFrame
+		frame=new JFrame("משחקים של הדר");//creating instance of JFrame
 		labelTargil=new JLabel();
         textField=new JTextField();
 
         font = new Font("SansSerif", Font.BOLD, 48);
         labelTargil.setFont(font);
         textField.setFont(font);
-
+        textField.setBackground(Color.PINK);
 
 		JButton button=new JButton("אישור");//creating instance of JButton
 
-        fram.setSize(500,500);//400 width and 500 height
+        frame.setSize(500,500);//400 width and 500 height
         labelTargil.setBounds(50,50,350, 50);
         textField.setBounds(0,50, 40,50);
 		button.setBounds(130,400,100, 40);
 
+
+
 		// אירוע לחיצת כפתור
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				textField.setText("תשובה נכונה");
+
+//			    int answer=0;
+//				//textField.setText("תשובה נכונה");
+//                answer = Integer.parseInt(textField.getText());
+//                //AnswerDetails answerDetails = new AnswerDetails();
+//                textField.setText(answer + 1);
+//                answerDetails.
+
 			}
 		});
 
-		fram.add(button);//adding button in JFrame
-		fram.add(textField);
-		fram.add(labelTargil);
-
-
-		fram.setLayout(null);//using no layout managers
-		fram.setVisible(CONSOLEVISIBLE);//making the frame visible
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(button);//adding button in JFrame
+		frame.add(textField);
+		frame.add(labelTargil);
+        frame.getContentPane().setBackground(Color.PINK);
+		frame.setLayout(null);//using no layout managers
+		frame.setVisible(CONSOLEVISIBLE);//making the frame visible
 	}
 
 	public static void main(String[] args) {
@@ -94,9 +104,9 @@ public class Main {
 			k = 0, // משחק הכפולות - מונה 10 תרגילים
 			num1 = 0,num2 = 0, // קבלת שני מספרים אקראיים למכפלה
 			input = 0, // משחק הכפולות - קבלת קלט מהמשתמש
-			tziun = 0, // צובר ציון ברמת מבחן אחד
+			grade = 0, // צובר ציון ברמת מבחן אחד
 			g = 0, // מונה 10 מבחנים
-			tziunAll = 0, //  צובר ציון לכל המבחנים שנעשו
+			gradeAll = 0, //  צובר ציון לכל המבחנים שנעשו
 			i = 0, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
 			minNumberLeft = 0, // סדר המספרים האמיתי שירוץ על לולאת אתחול התרגילים
 			maxNumberLeft = 0, // ההחלפה נועדה למקרה שמטריצת לוח הכפל שנבחרה אינה
@@ -108,8 +118,8 @@ public class Main {
 		    secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
 			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
 			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
-        long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
-		Date now1 = null,now2 = null;		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
+        //long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
+		Date now1 = null; /*now2 = null;*/		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
 		//FreeTTS freeTTS; // speach to text object
 
 		Scanner console = new Scanner(System.in);
@@ -117,6 +127,7 @@ public class Main {
 		ArrayList<Integer[]> targil = new ArrayList<Integer[]>();
 		// צובר תרגילים זמני - בסיום כל סיבוב כל האפשרויות - יתאפס לקבלת סדרת תרגילים חדשה
 		ArrayList<Integer[]> targilTemp = new ArrayList<Integer[]>();
+		AnswerDetails answerDetails = new AnswerDetails();
 
 		new Main();
 
@@ -250,7 +261,7 @@ public class Main {
 		// --- רוץ ברמת כל המבחנים (מספר מבחנים לסט אחד)  ----
 		do {
 			// אפס משתנים
-			tziun = 0;
+			grade = 0;
 			// כותרת מבחן מספר __
 			// רד 2 שורות ליצירת רווח
 			System.out.println();
@@ -277,6 +288,7 @@ public class Main {
 				// אם התשובה נכונה, הלולאה תפסיק ונעבור לתרגיל הבא
 				// --- רמת שאלה במבחן ----
 				for (i = 1; i <= MAXTRIES; i++){
+
 					// הדפס תרגיל
 					String targilText = "(" + k + ")   " + num1 + " x " + num2 + " = ";
 					System.out.print(targilText);
@@ -285,7 +297,7 @@ public class Main {
                     preferredSize.width = (int)(preferredSize.width*1.1);
                     labelTargil.setPreferredSize(preferredSize);
 
-                    textField.setBounds(labelTargil.getX() + preferredSize.width,50,100,50);
+                    textField.setBounds(labelTargil.getX() + preferredSize.width - 10,50,90,50);
 
 
                     // השמע תרגיל
@@ -301,69 +313,80 @@ public class Main {
 					// קבל קלט תשובה מהמשתמש
 					input = getAnswer(console);
 
-					// בצע בדיקת נכונות התשובה והצג מסקנה
-					// אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
-					if (input==num1*num2){
-						// טיפול בתשובה נכונה
-						// עצור מדידת זמן
-						now2 = new Date();
-						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-						secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
-                        secondsDiff = (int)secondsDiffLong;
-						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
-						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
-						if(WITHSPEECH > 0) {
-                            speak("correct");
-                        }
+                    answerDetails = checkAnswer(input,num1,num2,now1,i,grade,gradeAll);
 
-						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
-						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
-							System.out.print("   הדרי מהירה - כל הכבוד!!!");
-						}
-						System.out.println(); // רד שורה
+                    secondsDiff = answerDetails.getSecondsDiff();
+                    falseAnswer = answerDetails.getFalseAnswer();
+                    grade = answerDetails.getGrade();
+                    gradeAll = answerDetails.getGradeAll();
 
-						// אם התשובה נכונה בניסיון ראשון, הוסף 10 נקודת לצובר תשובות נכונות
-						if (i == 1) {
-							tziun = tziun + 1 ;
-							tziunAll = tziunAll + 1;
-						}
-						// בנכונות התשובה, נצא מלולאת אפשרויות מתן תשובות נוספות לאותו תרגיל
-						break;
-					} else {
-						// טיפול בתשובה לא נכונה
+                    if(!falseAnswer) break;
 
-                        // אתחול אינדיקציה שהיתה תשובה לא נכונה
-                        falseAnswer = true;
-						// אם התשובה אינה נכונה ציין זאת, תאפשר הזדמנות נוספת ובסוף הצג תשובה נכונה
-						// אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
-						if (i < MAXTRIES) {
-							// עד 4 ניסיונות כושלים הצג הודעה זו
-							System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
-
-							if(WITHSPEECH > 0) {
-								speak("wrong answer");
-							}
-						} else if (i==MAXTRIES) {
-							// בניסיון הרביעי והאחרון הצג הודעה זו
-							System.out.println("תשובה לא נכונה");
-						}
-						if (MAXTRIES==1 || i == MAXTRIES -1) {
-							// גלה תשובה בניסיון שלישי
-							System.out.println("התשובה הנכונה היא: " + num1*num2);
-							// עצור מדידת זמן
-							now2 = new Date();
-							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
-                            secondsDiff = (int)secondsDiffLong;
-						}
-					}
+//					// בצע בדיקת נכונות התשובה והצג מסקנה
+//					// אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
+//					if (input==num1*num2){
+//						// טיפול בתשובה נכונה
+//						// עצור מדידת זמן
+//						now2 = new Date();
+//						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
+//						secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+//                        secondsDiff = (int)secondsDiffLong;
+//						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
+//						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
+//						if(WITHSPEECH > 0) {
+//                            speak("correct");
+//                        }
+//
+//						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
+//						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
+//							System.out.print("   הדרי מהירה - כל הכבוד!!!");
+//						}
+//						System.out.println(); // רד שורה
+//
+//						// אם התשובה נכונה בניסיון ראשון, הוסף 10 נקודת לצובר תשובות נכונות
+//						if (i == 1) {
+//							grade = grade + 1 ;
+//							gradeAll = gradeAll + 1;
+//						}
+//						// בנכונות התשובה, נצא מלולאת אפשרויות מתן תשובות נוספות לאותו תרגיל
+//						break;
+//					} else {
+//						// טיפול בתשובה לא נכונה
+//
+//                        // אתחול אינדיקציה שהיתה תשובה לא נכונה
+//                        falseAnswer = true;
+//						// אם התשובה אינה נכונה ציין זאת, תאפשר הזדמנות נוספת ובסוף הצג תשובה נכונה
+//						// אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
+//						if (i < MAXTRIES) {
+//							// עד 4 ניסיונות כושלים הצג הודעה זו
+//							System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
+//
+//							if(WITHSPEECH > 0) {
+//								speak("wrong answer");
+//							}
+//						} else if (i==MAXTRIES) {
+//							// בניסיון הרביעי והאחרון הצג הודעה זו
+//							System.out.println("תשובה לא נכונה");
+//						}
+//						if (MAXTRIES==1 || i == MAXTRIES -1) {
+//							// גלה תשובה בניסיון שלישי
+//							System.out.println("התשובה הנכונה היא: " + num1*num2);
+//							// עצור מדידת זמן
+//							now2 = new Date();
+//							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
+//							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+//                          secondsDiff = (int)secondsDiffLong;
+//						}
+//					}
 				}
-                if (falseAnswer) {
+                if (i > 1 && i <= MAXTRIES) {
+				    // אם באחד הניסיונות התשובה אינה נכונה
                     // תאגור תרגיל שלא הצליח לצורך הצגתו בסיכום
                     // האיבר השלישי במארך אינו התשובה הנכונה אלא מספר הניסיונות
                     targilTemp.add(new Integer[] {num1, num2, i});
-                    // אתחול אינדיקציה חזרה לברירת מחדל (לבדוק אם היתה תשובה לא נכונה)
-                    // falseAnswer = false;
+                } else if (i > MAXTRIES) {
+                    // אם אף תשובה אינה נכונה
+                    targilTemp.add(new Integer[] {num1, num2, (secondsDiff - 1) * (-1) });
                 } else if (secondsDiff > TIMETOANSWERFORREPORT) {
                     // אם לקח לענות יותר מ 6 שניות התרגיל יצטבר לדוח התרגילים לשיפור
                     targilTemp.add(new Integer[] {num1, num2, secondsDiff * (-1) });
@@ -377,18 +400,18 @@ public class Main {
 			// הצג ציון סופי של בחינה אחת
 
 			System.out.println("___________________________________________");
-			System.out.println("הציון שלך הוא: " + tziun * 100 / MAXQUESTIONS + "    ");
+			System.out.println("הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    ");
 			System.out.println("הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות");
 			System.out.println("לקח לך להשיב: " + secondsTest + " שניות");
 			// תנאים לפרגון או המלצה לשיפור
-			if (tziun * 100 / MAXQUESTIONS > 90){
+			if (grade * 100 / MAXQUESTIONS > 90){
 				// אם הציון מעל 90 ציין זאת
 				System.out.println("כל הכבוד הדרי - קיבלת ציון גבוה מאד !!!") ;
 				if (secondsTest/MAXQUESTIONS < 9) {
 					// אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
 					System.out.println("כל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל") ;
 				}
-			} else if (tziun * 100 / MAXQUESTIONS < 60){
+			} else if (grade * 100 / MAXQUESTIONS < 60){
 				// אם הציון מתחת 70 ציין זאת
 				System.out.println("הדרי, מומלץ להוסיף ולתרגל") ;
 			}
@@ -405,7 +428,7 @@ public class Main {
                 System.out.println("__________________________________________");
             }
 			if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
-				System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + tziunAll * 100 / MAXQUESTIONS / g ) ;
+				System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g ) ;
 				System.out.println("זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;
 				System.out.println();
 			}
@@ -418,14 +441,14 @@ public class Main {
 				input = getAnswer(console);
 				// אפס צובר כל המבחנים, את צובר כל זמן במחינה ואת צובר כל זמן 10 הבחינות,
 				secondsTest = 0;
-				//tziunAll = 0;
+				//gradeAll = 0;
 				//secondsTestAll = 0; // לא חובה לאפס כי זה נתון סופי
 			}
 			// בצע לולאה של 10 מבחנים או הקשת 0 ליציאה
 		} while(g < MAXTESTS && !(input==0));
 
         // תנאי פירגון בסוף הסט
-        if (tziunAll * 100 / MAXQUESTIONS / g == 100) {
+        if (gradeAll * 100 / MAXQUESTIONS / g == 100) {
             System.out.println("===============================================") ;
             System.out.println("אבא, קיבלתי 100!!!") ;
             System.out.println("תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
@@ -489,4 +512,82 @@ public class Main {
 		voice.allocate();
 		voice.speak(text);
 	}
+
+    public static AnswerDetails checkAnswer(int input,int num1,int num2,Date now1,int i,int grade,int gradeAll) {
+        // בצע בדיקת נכונות התשובה והצג מסקנה
+        // אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
+
+        AnswerDetails answerDetails = new AnswerDetails();
+
+        boolean falseAnswer=false;
+        long secondsDiffLong=0;
+        int secondsDiff=0;
+        Date now2=null;
+
+        if (input==num1*num2){
+            // create the return object that will contain the answer details
+
+            // טיפול בתשובה נכונה
+            // עצור מדידת זמן
+            now2 = new Date();
+
+            // אתחול אינדיקציה שהיתה תשובה לא נכונה
+            //falseAnswer = false; // already default
+            // חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
+            secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+            secondsDiff = (int)secondsDiffLong;
+
+            // אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
+            System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
+            if(WITHSPEECH > 0) {
+                speak("correct");
+            }
+
+            // תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
+            if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
+                System.out.print("   הדרי מהירה - כל הכבוד!!!");
+            }
+            System.out.println(); // רד שורה
+
+            // אם התשובה נכונה בניסיון ראשון, הוסף נקודה לצובר תשובות נכונות
+            if (i == 1) {
+                grade++;
+                gradeAll++;
+            }
+            // בנכונות התשובה, נצא מלולאת אפשרויות מתן תשובות נוספות לאותו תרגיל
+            //break;
+        } else {
+            // טיפול בתשובה לא נכונה
+            Toolkit.getDefaultToolkit().beep();
+            // אתחול אינדיקציה שהיתה תשובה לא נכונה
+            falseAnswer = true;
+            // אם התשובה אינה נכונה ציין זאת, תאפשר הזדמנות נוספת ובסוף הצג תשובה נכונה
+            // אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
+            if (i < MAXTRIES) {
+                // עד 4 ניסיונות כושלים הצג הודעה זו
+                System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
+
+                if(WITHSPEECH > 0) {
+                    speak("wrong answer");
+                }
+            } else if (i==MAXTRIES) {
+                // בניסיון הרביעי והאחרון הצג הודעה זו
+                System.out.println("תשובה לא נכונה");
+            }
+            if (MAXTRIES==1 || i == MAXTRIES -1) {
+                //  גלה תשובה בניסיון שלישי (לפני אחרון)
+                System.out.println("התשובה הנכונה היא: " + num1*num2);
+                // עצור מדידת זמן
+                now2 = new Date();
+                // חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
+                secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
+                secondsDiff = (int)secondsDiffLong;
+            }
+        }
+        answerDetails.setSecondsDiff(secondsDiff);
+        answerDetails.setFalseAnswer(falseAnswer);
+        answerDetails.setGrade(grade);
+        answerDetails.setGradeAll(gradeAll);
+        return answerDetails;
+    }
 }

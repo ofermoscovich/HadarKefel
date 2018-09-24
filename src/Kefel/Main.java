@@ -21,8 +21,9 @@ import java.awt.event.*;
 
 public class Main {
 
-	private static final int MAXTESTS = 2; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 3; // מקסמום תרגילים למבחן
+	private static final int MAXTESTS = 10; // מקסימום מבחנים
+	private static final int MAXQUESTIONS = 10
+            ; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
@@ -62,14 +63,21 @@ public class Main {
         textField.setFont(font);
         textField.setBackground(Color.PINK);
 
-		JButton button=new JButton("אישור");//creating instance of JButton
+        ImageIcon picIcon = new ImageIcon("C:\\java\\workspace\\HadarKefel\\src\\Kefel\\hadar_slime.jpg");
+        JButton button=new JButton();//creating instance of JButton
+		//JButton button=new JButton("אישור");//creating instance of JButton
 
         frame.setSize(500,500);//400 width and 500 height
         labelTargil.setBounds(50,50,350, 50);
         textField.setBounds(0,50, 40,50);
-		button.setBounds(130,400,100, 40);
+		button.setBounds(130,200,100, 100);
 
+        // Set image to size of JButton...
+        int offset = button.getInsets().left;
+        button.setIcon(resizeIcon(picIcon, button.getWidth() - offset, button.getHeight() - offset));
 
+        //Image img = ImageIO.read(getClass().getResource("hadar_slime.jpg"));
+        //button.setIcon(new ImageIcon(img));
 
 		// אירוע לחיצת כפתור
 		button.addActionListener(new ActionListener(){
@@ -93,6 +101,12 @@ public class Main {
 		frame.setLayout(null);//using no layout managers
 		frame.setVisible(CONSOLEVISIBLE);//making the frame visible
 	}
+
+    private static Icon resizeIcon(ImageIcon icon, int resizedWidth, int resizedHeight) {
+        Image img = icon.getImage();
+        Image resizedImage = img.getScaledInstance(resizedWidth, resizedHeight,  java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
+    }
 
 	public static void main(String[] args) {
 

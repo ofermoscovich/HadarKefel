@@ -10,6 +10,10 @@ import com.sun.speech.freetts.VoiceManager;
 import javax.swing.*;
 import java.awt.event.*;
 
+
+import java.awt.image.*;
+import javax.swing.ImageIcon.*;
+
 // פרויקט לוח הכפל של הדרי
 // Speeching using FreeTTS
 
@@ -40,9 +44,11 @@ public class Main {
 
 	private static final int WITHSPEECH = 0; // 1 - עם דיבור ; 0 - בלי דיבור
 
-	private static final String VOICENAME_kevin = "kevin";
+	private static final String VOICENAME_kevin = "kevin"; // Speech type
 
-    private static final boolean CONSOLEVISIBLE = true;
+    private static final boolean CONSOLEVISIBLE = true; // האם gui ייראה או יוסתר
+
+    private static final Color BGFRAMECOLOR = Color.PINK; // צבע רקע למסך gui
 
     private static JFrame frame;
     private static JLabel labelTargil;
@@ -54,7 +60,14 @@ public class Main {
 
     // constructor
 	Main(){
+	    // GUI designing
+	    String iconPath = "./src/Kefel/hadar_slime.jpg";
+		ImageIcon picIcon = new ImageIcon(iconPath);
 		frame=new JFrame("משחקים של הדר");//creating instance of JFrame
+
+        Image icon = new javax.swing.ImageIcon(iconPath).getImage();
+        frame.setIconImage(icon);
+        //frame.setIconImage(ImageIcon.getImage());
 		labelTargil=new JLabel();
         textField=new JTextField();
 
@@ -63,9 +76,7 @@ public class Main {
         textField.setFont(font);
         textField.setBackground(Color.PINK);
 
-        ImageIcon picIcon = new ImageIcon("./src/Kefel/hadar_slime.jpg");
-        JButton button=new JButton();//creating instance of JButton
-		//JButton button=new JButton("אישור");//creating instance of JButton
+		JButton button=new JButton();//creating instance of JButton
 
         frame.setSize(500,500);//400 width and 500 height
         labelTargil.setBounds(50,50,350, 50);
@@ -75,9 +86,6 @@ public class Main {
         // Set image to size of JButton...
         int offset = button.getInsets().left;
         button.setIcon(resizeIcon(picIcon, button.getWidth() - offset, button.getHeight() - offset));
-
-        //Image img = ImageIO.read(getClass().getResource("hadar_slime.jpg"));
-        //button.setIcon(new ImageIcon(img));
 
 		// אירוע לחיצת כפתור
 		button.addActionListener(new ActionListener(){
@@ -97,7 +105,7 @@ public class Main {
 		frame.add(button);//adding button in JFrame
 		frame.add(textField);
 		frame.add(labelTargil);
-        frame.getContentPane().setBackground(Color.PINK);
+        frame.getContentPane().setBackground(BGFRAMECOLOR);
 		frame.setLayout(null);//using no layout managers
 		frame.setVisible(CONSOLEVISIBLE);//making the frame visible
 	}
@@ -335,63 +343,6 @@ public class Main {
                     gradeAll = answerDetails.getGradeAll();
 
                     if(!falseAnswer) break;
-
-//					// בצע בדיקת נכונות התשובה והצג מסקנה
-//					// אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
-//					if (input==num1*num2){
-//						// טיפול בתשובה נכונה
-//						// עצור מדידת זמן
-//						now2 = new Date();
-//						// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-//						secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
-//                        secondsDiff = (int)secondsDiffLong;
-//						// אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
-//						System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
-//						if(WITHSPEECH > 0) {
-//                            speak("correct");
-//                        }
-//
-//						// תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
-//						if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
-//							System.out.print("   הדרי מהירה - כל הכבוד!!!");
-//						}
-//						System.out.println(); // רד שורה
-//
-//						// אם התשובה נכונה בניסיון ראשון, הוסף 10 נקודת לצובר תשובות נכונות
-//						if (i == 1) {
-//							grade = grade + 1 ;
-//							gradeAll = gradeAll + 1;
-//						}
-//						// בנכונות התשובה, נצא מלולאת אפשרויות מתן תשובות נוספות לאותו תרגיל
-//						break;
-//					} else {
-//						// טיפול בתשובה לא נכונה
-//
-//                        // אתחול אינדיקציה שהיתה תשובה לא נכונה
-//                        falseAnswer = true;
-//						// אם התשובה אינה נכונה ציין זאת, תאפשר הזדמנות נוספת ובסוף הצג תשובה נכונה
-//						// אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
-//						if (i < MAXTRIES) {
-//							// עד 4 ניסיונות כושלים הצג הודעה זו
-//							System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
-//
-//							if(WITHSPEECH > 0) {
-//								speak("wrong answer");
-//							}
-//						} else if (i==MAXTRIES) {
-//							// בניסיון הרביעי והאחרון הצג הודעה זו
-//							System.out.println("תשובה לא נכונה");
-//						}
-//						if (MAXTRIES==1 || i == MAXTRIES -1) {
-//							// גלה תשובה בניסיון שלישי
-//							System.out.println("התשובה הנכונה היא: " + num1*num2);
-//							// עצור מדידת זמן
-//							now2 = new Date();
-//							// חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
-//							secondsDiffLong = (now2.getTime() - now1.getTime()) / 1000;
-//                          secondsDiff = (int)secondsDiffLong;
-//						}
-//					}
 				}
                 if (i > 1 && i <= MAXTRIES) {
 				    // אם באחד הניסיונות התשובה אינה נכונה

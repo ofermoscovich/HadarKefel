@@ -63,7 +63,7 @@ public class Main {
         textField.setFont(font);
         textField.setBackground(Color.PINK);
 
-        ImageIcon picIcon = new ImageIcon("C:\\java\\workspace\\HadarKefel\\src\\Kefel\\hadar_slime.jpg");
+        ImageIcon picIcon = new ImageIcon("./src/Kefel/hadar_slime.jpg");
         JButton button=new JButton();//creating instance of JButton
 		//JButton button=new JButton("אישור");//creating instance of JButton
 

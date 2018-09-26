@@ -56,7 +56,21 @@ public class Main {
     private static Font font;
     private static Dimension preferredSize;
 
+    // משחק הכפולות
+    private static int k = 0, // משחק הכפולות - מונה 10 תרגילים
+                num1 = 0,num2 = 0, // קבלת שני מספרים אקראיים למכפלה
+                input = 0, // משחק הכפולות - קבלת קלט מהמשתמש
+                grade = 0, // צובר ציון ברמת מבחן אחד
+                g = 0, // מונה 10 מבחנים
+                gradeAll = 0, //  צובר ציון לכל המבחנים שנעשו
+                i = 0, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
+                secondsDiff = 0; // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
+
+
+    private static Date now1 = null; /*now2 = null;*/		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
     //AnswerDetails answerDetails = new AnswerDetails();
+    // אתחול אינדיקציה לבדוק אם היתה תשובה לא נכונה
+    private static boolean falseAnswer = false;
 
     // constructor
 	Main(){
@@ -93,7 +107,8 @@ public class Main {
 
 //			    int answer=0;
 //				//textField.setText("תשובה נכונה");
-//                answer = Integer.parseInt(textField.getText());
+                input = Integer.parseInt(textField.getText());
+                checkAnswer();
 //                //AnswerDetails answerDetails = new AnswerDetails();
 //                textField.setText(answer + 1);
 //                answerDetails.
@@ -122,14 +137,14 @@ public class Main {
 		int y, //  מונה שורות
 			x, // מונה עמודות
 
-		// משחק הכפולות
-			k = 0, // משחק הכפולות - מונה 10 תרגילים
-			num1 = 0,num2 = 0, // קבלת שני מספרים אקראיים למכפלה
-			input = 0, // משחק הכפולות - קבלת קלט מהמשתמש
-			grade = 0, // צובר ציון ברמת מבחן אחד
-			g = 0, // מונה 10 מבחנים
-			gradeAll = 0, //  צובר ציון לכל המבחנים שנעשו
-			i = 0, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
+//		// משחק הכפולות
+//			k = 0, // משחק הכפולות - מונה 10 תרגילים
+//			num1 = 0,num2 = 0, // קבלת שני מספרים אקראיים למכפלה
+//			input = 0, // משחק הכפולות - קבלת קלט מהמשתמש
+//			grade = 0, // צובר ציון ברמת מבחן אחד
+//			g = 0, // מונה 10 מבחנים
+//			gradeAll = 0, //  צובר ציון לכל המבחנים שנעשו
+//			i = 0, // מונה מחזוריות הזדמנויות להשיב ולתקן תשובה לא נכונה
 			minNumberLeft = 0, // סדר המספרים האמיתי שירוץ על לולאת אתחול התרגילים
 			maxNumberLeft = 0, // ההחלפה נועדה למקרה שמטריצת לוח הכפל שנבחרה אינה
 			minNumberRight = 0,// שווה ויש טווח רוחב מספרים גדול מטווח אורך
@@ -137,11 +152,11 @@ public class Main {
 			numOfTargilim = 0,  // מונה כמות התרגילים באתחול תרגילים (מקסימום מספר תרגילים למבחן * מספר המבחנים)
 			numOfTargilimTemp = 0,  // מונה כמות התרגילים באתחול תרגילים (מתאפס בכל סיבוב שהסתיימו כל אפשרויות התרגילים ללא חזרות)
 			regularLoop = 0,  // באתחול תרגילים אינדיקציה להחלפת מקום המספרים בתרגיל
-		    secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
+//		    secondsDiff = 0, // הפרש שניות עד מתן תשובה כלשהי או תשובה נכונה
 			secondsTest = 0,  // משך הזמן המצטבר שלקח להשיב על מבחן אחד
 			secondsTestAll = 0; // משך הזמן המצטבר שלקח להשיב על כל המבחנים
         //long secondsDiffLong; // הפרש שניות עד מתן תשובה לפני העברה לטיפוס int
-		Date now1 = null; /*now2 = null;*/		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
+//		Date now1 = null; /*now2 = null;*/		// מדידת זמן בשניות לתשובה - לפני פתרון ועד הפיתרון
 		//FreeTTS freeTTS; // speach to text object
 
 		Scanner console = new Scanner(System.in);
@@ -304,7 +319,7 @@ public class Main {
 				targil.remove(0);
 
                 // אתחול אינדיקציה לבדוק אם היתה תשובה לא נכונה
-                boolean falseAnswer = false;
+                falseAnswer = false;
 
 				// לולאת מחזוריות הזדמנויות להשיב במקרה ותשובה אינה נכונה
 				// אם התשובה נכונה, הלולאה תפסיק ונעבור לתרגיל הבא
@@ -335,12 +350,13 @@ public class Main {
 					// קבל קלט תשובה מהמשתמש
 					input = getAnswer(console);
 
-                    answerDetails = checkAnswer(input,num1,num2,now1,i,grade,gradeAll);
+                    checkAnswer();
+//                    answerDetails = checkAnswer(input,num1,num2,now1,i,grade,gradeAll);
 
-                    secondsDiff = answerDetails.getSecondsDiff();
-                    falseAnswer = answerDetails.getFalseAnswer();
-                    grade = answerDetails.getGrade();
-                    gradeAll = answerDetails.getGradeAll();
+//                    secondsDiff = answerDetails.getSecondsDiff();
+//                    falseAnswer = answerDetails.getFalseAnswer();
+//                    grade = answerDetails.getGrade();
+//                    gradeAll = answerDetails.getGradeAll();
 
                     if(!falseAnswer) break;
 				}
@@ -478,15 +494,15 @@ public class Main {
 		voice.speak(text);
 	}
 
-    public static AnswerDetails checkAnswer(int input,int num1,int num2,Date now1,int i,int grade,int gradeAll) {
+    public static /*AnswerDetails*/ void checkAnswer() {
         // בצע בדיקת נכונות התשובה והצג מסקנה
         // אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
 
-        AnswerDetails answerDetails = new AnswerDetails();
+//        AnswerDetails answerDetails = new AnswerDetails();
 
-        boolean falseAnswer=false;
+//        boolean falseAnswer=false;
         long secondsDiffLong=0;
-        int secondsDiff=0;
+//        int secondsDiff=0;
         Date now2=null;
 
         if (input==num1*num2){
@@ -549,10 +565,10 @@ public class Main {
                 secondsDiff = (int)secondsDiffLong;
             }
         }
-        answerDetails.setSecondsDiff(secondsDiff);
-        answerDetails.setFalseAnswer(falseAnswer);
-        answerDetails.setGrade(grade);
-        answerDetails.setGradeAll(gradeAll);
-        return answerDetails;
+//        answerDetails.setSecondsDiff(secondsDiff);
+//        answerDetails.setFalseAnswer(falseAnswer);
+//        answerDetails.setGrade(grade);
+//        answerDetails.setGradeAll(gradeAll);
+//        return answerDetails;
     }
 }

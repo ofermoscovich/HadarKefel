@@ -51,9 +51,18 @@ public class Main {
     private static final Color BGFRAMECOLOR = Color.PINK; // צבע רקע למסך gui
 
     private static JFrame frame;
+
+    private static JLabel labelTitle;
+    private static JLabel labelHeader;
     private static JLabel labelTargil;
-    private static JTextField textField;
-    private static Font font;
+    private static JLabel labelRemark1;
+    private static JLabel labelRemark2;
+    private static JLabel labelbottom;
+    private static JLabel labelSummary;
+
+    private static JTextField textFieldAnswer;
+    private static JTextField textFieldLog;
+    private static Font font1,font2,font3;
     private static Dimension preferredSize;
 
 	// צובר תרגילים כללי - כל סיבוב יעורבב בתוכו ויתווסף
@@ -92,19 +101,46 @@ public class Main {
         frame.setIconImage(icon);
         //frame.setIconImage(ImageIcon.getImage());
 		labelTargil=new JLabel();
-        textField=new JTextField();
 
-        font = new Font("SansSerif", Font.BOLD, 48);
-        labelTargil.setFont(font);
-        textField.setFont(font);
-        textField.setBackground(Color.PINK);
+        labelTitle = new JLabel();
+        labelHeader = new JLabel();
+        labelRemark1 = new JLabel();
+        labelRemark2 = new JLabel();
+        labelbottom = new JLabel();
+        labelSummary = new JLabel();
+
+        textFieldAnswer = new JTextField();
+
+        font1 = new Font("SansSerif", Font.BOLD, 30);
+        font2 = new Font("SansSerif", Font.BOLD, 48);
+
+        labelTitle.setFont(font1);
+        labelHeader.setFont(font1);
+        labelTargil.setFont(font2);
+        labelRemark1.setFont(font1);
+        labelRemark2.setFont(font1);
+        labelbottom.setFont(font1);
+        labelSummary.setFont(font1);
+
+
+
+        textFieldAnswer.setFont(font2);
+        textFieldAnswer.setBackground(Color.PINK);
 
 		JButton button=new JButton();//creating instance of JButton
 
         frame.setSize(500,500);//400 width and 500 height
-        labelTargil.setBounds(50,50,350, 50);
-        textField.setBounds(0,50, 40,50);
-		button.setBounds(130,200,100, 100);
+
+        labelTitle.setBounds(50,50,350, 50);
+        labelHeader.setBounds(50,150,350, 50);
+        labelTargil.setBounds(50,250,350, 50);
+        labelRemark1.setBounds(50,350,400, 50);
+        labelRemark2.setBounds(50,400,450, 50);
+        labelbottom.setBounds(50,500,350, 50);
+        labelSummary.setBounds(50,550,350, 50);
+
+        textFieldAnswer.setBounds(0,250, 40,50);
+		button.setBounds(130,600,100, 100);
 
         // Set image to size of JButton...
         int offset = button.getInsets().left;
@@ -115,14 +151,14 @@ public class Main {
 			public void actionPerformed(ActionEvent e){
 
 //			    int answer=0;
-//				//textField.setText("תשובה נכונה");
-                input = Integer.parseInt(textField.getText());
+//				//textFieldAnswer.setText("תשובה נכונה");
+                input = Integer.parseInt(textFieldAnswer.getText());
                 checkAnswer();
 				postAnswerCheck();
 				getNextTargil();
 				showTargil();
 //                //AnswerDetails answerDetails = new AnswerDetails();
-//                textField.setText(answer + 1);
+//                textFieldAnswer.setText(answer + 1);
 //                answerDetails.
 
 			}
@@ -130,20 +166,32 @@ public class Main {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(button);//adding button in JFrame
-		frame.add(textField);
-		frame.add(labelTargil);
+		frame.add(textFieldAnswer);
+        frame.add(labelTitle);
+        frame.add(labelHeader);
+        frame.add(labelTargil);
+        frame.add(labelRemark1);
+        frame.add(labelRemark2);
+        frame.add(labelbottom);
+        frame.add(labelSummary);
         frame.getContentPane().setBackground(BGFRAMECOLOR);
 		frame.setLayout(null);//using no layout managers
 		frame.setVisible(CONSOLEVISIBLE);//making the frame visible
 	}
 
+    //////////////////////////////////////////////////////////////////////////////////
+    // התאמת גודל אובייקט תמונה לתמונה
+    //////////////////////////////////////////////////////////////////////////////////
     private static Icon resizeIcon(ImageIcon icon, int resizedWidth, int resizedHeight) {
         Image img = icon.getImage();
         Image resizedImage = img.getScaledInstance(resizedWidth, resizedHeight,  java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
     }
 
-	public static void main(String[] args) {
+    //////////////////////////////////////////////////////////////////////////////////
+    // לוגיקה ראשית
+    //////////////////////////////////////////////////////////////////////////////////
+    public static void main(String[] args) {
 
 		// ציור לוח הכפל
 		int y, //  מונה שורות
@@ -181,8 +229,10 @@ public class Main {
 		System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 		//=========== ציור לוח הכפל ===========
 		// הצגת כותרת
-		System.out.println("לוח הכפל של הדר") ;
-		System.out.println("---------------") ;
+        String messageTitle = "תרגילי לוח הכפל של הדר";
+		System.out.println(messageTitle) ;
+		System.out.println("----------------------") ;
+        labelTitle.setText(messageTitle);
 
 		// לולאה חיצונית לציור 10 שורות
 
@@ -313,8 +363,11 @@ public class Main {
 			// רד 2 שורות ליצירת רווח
 			System.out.println();
 			System.out.println();
-			System.out.println("מבחן מספר " + (g+1) + " מתוך " + MAXTESTS);
+			String messageHeader = "מבחן מספר " + (g+1) + " מתוך " + MAXTESTS;
+			System.out.println(messageHeader);
 			System.out.println("__________________");
+            labelHeader.setText(messageHeader);
+
 
 			// --- רוץ ברמת מבחן אחד (כמות תרגילים למבחן אחד) ----
 			for (k = 1; k <= MAXQUESTIONS; k++){
@@ -410,7 +463,7 @@ public class Main {
 			preferredSize = labelTargil.getPreferredSize();
 			preferredSize.width = (int) (preferredSize.width * 1.1);
 			labelTargil.setPreferredSize(preferredSize);
-			textField.setBounds(labelTargil.getX() + preferredSize.width - 10, 50, 90, 50);
+            textFieldAnswer.setBounds(labelTargil.getX() + preferredSize.width - 10, 250, 90, 50);
 		}
 
 		// השמע תרגיל
@@ -432,7 +485,7 @@ public class Main {
         // אם התשובה נכונה - צא מהלולאה והמשך לתרגיל הבא
 
 //        AnswerDetails answerDetails = new AnswerDetails();
-
+        String messgaeRemark1, messgaeRemark2;
 //        boolean falseAnswer=false;
         long secondsDiffLong=0;
 //        int secondsDiff=0;
@@ -452,14 +505,20 @@ public class Main {
             secondsDiff = (int)secondsDiffLong;
 
             // אם התשובה נכונה ציין זאת ואת מספר השניות שלקח
-            System.out.print("--- תשובה נכונה בתוך " + secondsDiff + " שניות ---") ;
+            messgaeRemark1 = "--- תשובה נכונה בתוך " + secondsDiff + " שניות ---";
+            System.out.print(messgaeRemark1) ;
+            labelRemark1.setText(messgaeRemark1);
+            labelRemark2.setText("");
+
             if(WITHSPEECH > 0) {
                 speak("correct");
             }
 
             // תנאי פרגון אם נתנה תשובה נכונה תוך 3 שניות
             if (secondsDiff <= TIMETOANSWERFORGOODFEEDBACK ) {
-                System.out.print("   הדרי מהירה - כל הכבוד!!!");
+                messgaeRemark2 = "   הדרי מהירה - כל הכבוד!!!";
+                System.out.print(messgaeRemark2);
+                labelRemark2.setText(messgaeRemark2);
             }
             System.out.println(); // רד שורה
 
@@ -479,18 +538,27 @@ public class Main {
             // אם התשובה האחרונה אינה נכונה - יתאפשר לחזור ולהקליד אותה לאחר הצגת התשובה הנכונה
             if (i < MAXTRIES) {
                 // עד 4 ניסיונות כושלים הצג הודעה זו
-                System.out.println("תשובה לא נכונה - נסה שוב בניסיון " + (i + 1));
+                messgaeRemark1 = "תשובה לא נכונה - נסה שוב בניסיון " + (i + 1);
+                System.out.println(messgaeRemark1);
+                labelRemark1.setText(messgaeRemark1);
+                labelRemark2.setText("");
 
                 if(WITHSPEECH > 0) {
                     speak("wrong answer");
                 }
             } else if (i==MAXTRIES) {
                 // בניסיון הרביעי והאחרון הצג הודעה זו
-                System.out.println("תשובה לא נכונה");
+                messgaeRemark1 = "תשובה לא נכונה";
+                System.out.println(messgaeRemark1);
+                labelRemark1.setText(messgaeRemark1);
+                labelRemark2.setText("");
             }
             if (MAXTRIES==1 || i == MAXTRIES -1) {
                 //  גלה תשובה בניסיון שלישי (לפני אחרון)
-                System.out.println("התשובה הנכונה היא: " + num1*num2);
+                messgaeRemark1 = "התשובה הנכונה היא: " + num1*num2;
+                System.out.println(messgaeRemark1);
+                labelRemark1.setText(messgaeRemark1);
+                labelRemark2.setText("");
                 // עצור מדידת זמן
                 now2 = new Date();
                 // חשב משך הזמן שלקח להשיב תשובה נכונה בשניות
@@ -528,7 +596,7 @@ public class Main {
         secondsTestAll += secondsTest ;
 
         // הצג ציון סופי של בחינה אחת
-
+//==>
         System.out.println("___________________________________________");
         System.out.println("הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    ");
         System.out.println("הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות");

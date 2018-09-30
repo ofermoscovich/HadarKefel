@@ -598,9 +598,9 @@ public class Main {
         // הצג ציון סופי של בחינה אחת
 //==>
         System.out.println("___________________________________________");
-        System.out.println("הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    ");
-        System.out.println("הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות");
-        System.out.println("לקח לך להשיב: " + secondsTest + " שניות");
+        System.out.println("הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
+                           "הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות\n" +
+                           "לקח לך להשיב: " + secondsTest + " שניות");
         // תנאים לפרגון או המלצה לשיפור
         if (grade * 100 / MAXQUESTIONS > 90){
             // אם הציון מעל 90 ציין זאת
@@ -626,8 +626,8 @@ public class Main {
             System.out.println("__________________________________________");
         }
         if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
-            System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g ) ;
-            System.out.println("זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;
+            System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g + "\n" +
+                               "זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;
             System.out.println();
         }
         if(g < MAXTESTS) { // מקרה קצה: שאל אם להמשיך למבחן הבא ככל שטרם הגיע המבחן האחרון
@@ -651,13 +651,13 @@ public class Main {
         // תנאי פירגון בסוף הסט
         if (gradeAll * 100 / MAXQUESTIONS / g == 100) {
             System.out.println("===============================================") ;
-            System.out.println("אבא, קיבלתי 100!!!") ;
-            System.out.println("תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
+            System.out.println("אבא, קיבלתי 100!!!\n" +
+                               "תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
             System.out.println("===============================================") ;
         }
         if(targilTemp.size() > 0) {
-            System.out.println("תרגילים שצריך לעבוד עליהם");
-            System.out.println("-------------------------");
+            System.out.println("דוח תרגילים שצריך לעבוד עליהם");
+            System.out.println("-----------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם
             for (int s = 0;s < targilTemp.size();s++) {
                 num1 = targilTemp.get(s)[0]; // מספר שמאלי

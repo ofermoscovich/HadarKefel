@@ -4,12 +4,17 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
+// speech
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
+//swing
 import javax.swing.*;
 import java.awt.event.*;
-
+// messages
+import javax.swing.JOptionPane;
+//import javafx.scene.control.Alert;
+//import javafx.scene.control.Alert.AlertType;
+//import javafx.application.Platform;
 
 import java.awt.image.*;
 import javax.swing.ImageIcon.*;
@@ -26,7 +31,7 @@ import javax.swing.ImageIcon.*;
 public class Main {
 
 	private static final int MAXTESTS = 10; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 10
+	private static final int MAXQUESTIONS = 10;
             ; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
@@ -59,6 +64,8 @@ public class Main {
     private static JLabel labelRemark2;
     private static JLabel labelbottom;
     private static JLabel labelSummary;
+
+    private static JButton button;
 
     private static JTextField textFieldAnswer;
     private static JTextField textFieldLog;
@@ -95,19 +102,19 @@ public class Main {
 	    // GUI designing
 	    String iconPath = "./src/Kefel/hadar_slime.jpg";
 		ImageIcon picIcon = new ImageIcon(iconPath);
-		frame=new JFrame("משחקי מספרים של הדר");//creating instance of JFrame
+		frame=new JFrame("משחקי המספרים של הדר");//creating instance of JFrame
 
         Image icon = new javax.swing.ImageIcon(iconPath).getImage();
         frame.setIconImage(icon);
         //frame.setIconImage(ImageIcon.getImage());
 		labelTargil=new JLabel();
 
-        labelTitle = new JLabel();
-        labelHeader = new JLabel();
-        labelRemark1 = new JLabel();
-        labelRemark2 = new JLabel();
-        labelbottom = new JLabel();
-        labelSummary = new JLabel();
+        labelTitle = new JLabel("",SwingConstants.RIGHT);
+        labelHeader = new JLabel("",SwingConstants.RIGHT);
+        labelRemark1 = new JLabel("",SwingConstants.RIGHT);
+        labelRemark2 = new JLabel("",SwingConstants.RIGHT);
+        labelbottom = new JLabel("",SwingConstants.RIGHT);
+        labelSummary = new JLabel("",SwingConstants.RIGHT);
 
         textFieldAnswer = new JTextField();
 
@@ -127,20 +134,21 @@ public class Main {
         textFieldAnswer.setFont(font2);
         textFieldAnswer.setBackground(Color.PINK);
 
-		JButton button=new JButton();//creating instance of JButton
+		button=new JButton();//creating instance of JButton
 
-        frame.setSize(500,500);//400 width and 500 height
+        frame.setSize(800,800);//400 width and 500 height
 
-        labelTitle.setBounds(50,50,350, 50);
-        labelHeader.setBounds(50,150,350, 50);
-        labelTargil.setBounds(50,250,350, 50);
-        labelRemark1.setBounds(50,350,400, 50);
-        labelRemark2.setBounds(50,400,450, 50);
-        labelbottom.setBounds(50,500,350, 50);
-        labelSummary.setBounds(50,550,350, 50);
+        labelTitle.setBounds(50,50,400, 50);
+        labelHeader.setBounds(50,150,400, 50);
+        labelTargil.setBounds(50,250,400, 50);
+        labelRemark1.setBounds(50,350,500, 50);
+        labelRemark2.setBounds(50,400,500, 50);
+        labelbottom.setBounds(50,500,500, 50);
+        labelSummary.setBounds(50,550,500, 50);
 
-        textFieldAnswer.setBounds(0,250, 40,50);
-		button.setBounds(130,600,100, 100);
+        textFieldAnswer.setBounds(10,250, 40,50);
+        labelTargil.setBorder(BorderFactory.createLoweredBevelBorder());
+		button.setBounds(450,250,100, 100);
 
         // Set image to size of JButton...
         int offset = button.getInsets().left;
@@ -149,18 +157,31 @@ public class Main {
 		// אירוע לחיצת כפתור
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-
-//			    int answer=0;
-//				//textFieldAnswer.setText("תשובה נכונה");
                 input = Integer.parseInt(textFieldAnswer.getText());
+                System.out.println(input);
                 checkAnswer();
-				postAnswerCheck();
-				getNextTargil();
-				showTargil();
-//                //AnswerDetails answerDetails = new AnswerDetails();
-//                textFieldAnswer.setText(answer + 1);
-//                answerDetails.
 
+                if(falseAnswer) {
+                    i++;
+                } //else {
+                  //  k++;
+                  //  i=1;
+                //}
+                postAnswerCheck();
+                if (!falseAnswer) {
+                    i=1;
+                }
+                textFieldAnswer.setText("");
+
+				if(MAXQUESTIONS >= k && !falseAnswer && i>MAXTRIES) {
+                    getNextTargil();
+                    showTargil();
+                } else if (MAXQUESTIONS == k) {
+                    endOfTest();
+                    if (MAXTESTS==g) {
+                       testsSetSummary();
+                    }
+                }
 			}
 		});
 
@@ -406,6 +427,8 @@ public class Main {
 				console.next();
 			}
 		} while(isInputCorrect == false);
+        textFieldAnswer.setText(Integer.toString(input));
+        textFieldAnswer.setText("");
 		return input;
 	}
 
@@ -462,8 +485,12 @@ public class Main {
 			labelTargil.setText(targilText);
 			preferredSize = labelTargil.getPreferredSize();
 			preferredSize.width = (int) (preferredSize.width * 1.1);
+//            labelRemark1.setText("");
+//            labelRemark2.setText("");
 			labelTargil.setPreferredSize(preferredSize);
-            textFieldAnswer.setBounds(labelTargil.getX() + preferredSize.width - 10, 250, 90, 50);
+            int labelTargilx = labelTargil.getX() + preferredSize.width - 10;
+            textFieldAnswer.setBounds(labelTargilx, 250, 90, 50);
+            button.setBounds(labelTargilx + 100,250,100, 100);
 		}
 
 		// השמע תרגיל
@@ -592,26 +619,33 @@ public class Main {
     // הצגת סטטיסטיקות בסיום מבחן אחד
     //////////////////////////////////////////////////////////////////////////////////
 	public static void endOfTest() {
+
+        String messageBottom;
         // צבור את שניות מתן התשובות של המבחן לצובר כל המבחנים
         secondsTestAll += secondsTest ;
 
         // הצג ציון סופי של בחינה אחת
 //==>
         System.out.println("___________________________________________");
-        System.out.println("הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
-                           "הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות\n" +
-                           "לקח לך להשיב: " + secondsTest + " שניות");
+        messageBottom = "הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
+                "הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות\n" +
+                "לקח לך להשיב: " + secondsTest + " שניות\n";
+        //System.out.print(messageBottom);
+
         // תנאים לפרגון או המלצה לשיפור
         if (grade * 100 / MAXQUESTIONS > 90){
             // אם הציון מעל 90 ציין זאת
-            System.out.println("כל הכבוד הדרי - קיבלת ציון גבוה מאד !!!") ;
+            messageBottom += "\nכל הכבוד הדרי - קיבלת ציון גבוה מאד !!!";
+            //System.out.print(messageBottom) ;
             if (secondsTest/MAXQUESTIONS < 9) {
                 // אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
-                System.out.println("כל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל") ;
+                messageBottom += "\nכל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל";
+                //System.out.println(messageBottom) ;
             }
         } else if (grade * 100 / MAXQUESTIONS < 60){
             // אם הציון מתחת 70 ציין זאת
-            System.out.println("הדרי, מומלץ להוסיף ולתרגל") ;
+            messageBottom += "\nהדרי, מומלץ להוסיף ולתרגל";
+            //System.out.println(messageBottom) ;
         }
 
         // מונה מבחנים
@@ -619,29 +653,32 @@ public class Main {
 
         // הצג נתונים סופיים של כל הבחינות עד עתה
 
-        System.out.println();
-        System.out.println("__________________________________________");
+        //System.out.println();
+        messageBottom += "\n__________________________________________\n";
         if (g == MAXTESTS) { // להדפיס דוח סיכום כללי רק למבחן האחרון
-            System.out.println("_________________ סיכום __________________");
-            System.out.println("__________________________________________");
+            messageBottom += "\n_________________ סיכום __________________";
+            messageBottom += "__________________________________________\n";
         }
         if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
-            System.out.println("ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g + "\n" +
-                               "זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות") ;
-            System.out.println();
+            messageBottom += "ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g + "\n" +
+                               "זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + "\n\n שניות" ;
+            //System.out.println();
         }
         if(g < MAXTESTS) { // מקרה קצה: שאל אם להמשיך למבחן הבא ככל שטרם הגיע המבחן האחרון
             // שאלה למשתמש האם ברצונו להמשיך למבחן נוסף
-            System.out.println("האם ברצונך להמשיך למבחן הבא?");
-            System.out.println("להמשך הקש 1; לסיום הקש 0") ;
+            messageBottom += "\nהאם ברצונך להמשיך למבחן הבא?";
+            messageBottom += "\nלהמשך הקש 1; לסיום הקש 0" ;
 
             // קבל קלט תשובה מהמשתמש (כפילות לפונקציה)
-            input = getAnswer(console);
+            ////input = getAnswer(console);
+            System.out.println(messageBottom);
+            infoBox(messageBottom,  "סיום מבחן " + g);
             // אפס צובר כל המבחנים, את צובר כל זמן במחינה ואת צובר כל זמן 10 הבחינות,
             secondsTest = 0;
             //gradeAll = 0;
             //secondsTestAll = 0; // לא חובה לאפס כי זה נתון סופי
         }
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -650,16 +687,16 @@ public class Main {
     public static void testsSetSummary() {
         // תנאי פירגון בסוף הסט
         if (gradeAll * 100 / MAXQUESTIONS / g == 100) {
-            System.out.println("===============================================") ;
+            System.out.println("===============================================");
             System.out.println("אבא, קיבלתי 100!!!\n" +
-                               "תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש") ;
-            System.out.println("===============================================") ;
+                    "תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש");
+            System.out.println("===============================================");
         }
-        if(targilTemp.size() > 0) {
+        if (targilTemp.size() > 0) {
             System.out.println("דוח תרגילים שצריך לעבוד עליהם");
             System.out.println("-----------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם
-            for (int s = 0;s < targilTemp.size();s++) {
+            for (int s = 0; s < targilTemp.size(); s++) {
                 num1 = targilTemp.get(s)[0]; // מספר שמאלי
                 num2 = targilTemp.get(s)[1]; // מספר ימני
                 int num3 = targilTemp.get(s)[2]; // אם חיובי: אוגר מספר ניסיונות לאחר תשובה שגויה ; אם שלילי: אוגר תרגילים שלקח זמן רב לפתור
@@ -676,5 +713,15 @@ public class Main {
         if (WITHSPEECH > 0) {
             speak("end of test");
         }
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // message box
+    // example: infoBox("YOUR INFORMATION HERE", "TITLE BAR MESSAGE", "HEADER MESSAGE");
+    //////////////////////////////////////////////////////////////////////////////////
+    public static void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }

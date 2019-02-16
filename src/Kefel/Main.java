@@ -30,8 +30,8 @@ import javax.swing.ImageIcon.*;
 
 public class Main {
 
-	private static final int MAXTESTS = 10; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 10;
+	private static final int MAXTESTS = 2; // מקסימום מבחנים
+	private static final int MAXQUESTIONS = 2;
             ; // מקסמום תרגילים למבחן
 	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
@@ -51,7 +51,7 @@ public class Main {
 
 	private static final String VOICENAME_kevin = "kevin"; // Speech type
 
-    private static final boolean CONSOLEVISIBLE = true; // האם gui ייראה או יוסתר
+    private static final boolean CONSOLEVISIBLE = false; // האם gui ייראה או יוסתר
 
     private static final Color BGFRAMECOLOR = Color.PINK; // צבע רקע למסך gui
 
@@ -693,8 +693,8 @@ public class Main {
             System.out.println("===============================================");
         }
         if (targilTemp.size() > 0) {
-            System.out.println("דוח תרגילים שצריך לעבוד עליהם");
-            System.out.println("-----------------------------");
+            System.out.println("רשימת תרגילים לשיפור (" + targilTemp.size() + ")");
+            System.out.println("-------------------------");
             // רשימת תרגילים שהמבצע התקשה בהם
             for (int s = 0; s < targilTemp.size(); s++) {
                 num1 = targilTemp.get(s)[0]; // מספר שמאלי

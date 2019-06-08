@@ -30,17 +30,17 @@ import javax.swing.ImageIcon.*;
 
 public class Main {
 
-	private static final int MAXTESTS = 2; // מקסימום מבחנים
-	private static final int MAXQUESTIONS = 2;
+	private static final int MAXTESTS = 10; // מקסימום מבחנים
+	private static final int MAXQUESTIONS = 10; // מקסימום שאלות למבחן
             ; // מקסמום תרגילים למבחן
-	private static final int MAXTRIES = 4;  // מקסימום ניסיונות להשיב נכון
+	private static final int MAXTRIES = 2;  // מקסימום ניסיונות להשיב נכון
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
 	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER1 = 11; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER1 = 10; // מספר אקראי מקסימלי בתרגיל
 	// מספר ימני
 	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER2 = 11; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER2 = 10; // מספר אקראי מקסימלי בתרגיל
 
 	private static final int SHUFFLE = 5;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
 
@@ -176,9 +176,10 @@ public class Main {
 				if(MAXQUESTIONS >= k && !falseAnswer && i>MAXTRIES) {
                     getNextTargil();
                     showTargil();
-                } else if (MAXQUESTIONS == k) {
+                }
+                if (MAXQUESTIONS >= k) { //==
                     endOfTest();
-                    if (MAXTESTS==g) {
+                    if (MAXTESTS >= g) {
                        testsSetSummary();
                     }
                 }
@@ -376,7 +377,7 @@ public class Main {
 //			System.out.println("(" + e + ")   " + targil.get(e)[0] + " * " + targil.get(e)[1] + " = " + targil.get(e)[2]);
 //		}
 
-		// --- רוץ ברמת כל המבחנים (מספר מבחנים לסט אחד)  ----
+		// --- רוץ ברמת כל המבחנים (יש מספר מבחנים לסט אחד)  ----
 		do {
 			// אפס משתנים
 			grade = 0;
@@ -625,27 +626,23 @@ public class Main {
         secondsTestAll += secondsTest ;
 
         // הצג ציון סופי של בחינה אחת
-//==>
         System.out.println("___________________________________________");
         messageBottom = "הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
                 "הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות\n" +
                 "לקח לך להשיב: " + secondsTest + " שניות\n";
-        //System.out.print(messageBottom);
 
         // תנאים לפרגון או המלצה לשיפור
         if (grade * 100 / MAXQUESTIONS > 90){
             // אם הציון מעל 90 ציין זאת
             messageBottom += "\nכל הכבוד הדרי - קיבלת ציון גבוה מאד !!!";
-            //System.out.print(messageBottom) ;
+
             if (secondsTest/MAXQUESTIONS < 9) {
                 // אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
                 messageBottom += "\nכל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל";
-                //System.out.println(messageBottom) ;
             }
         } else if (grade * 100 / MAXQUESTIONS < 60){
             // אם הציון מתחת 70 ציין זאת
             messageBottom += "\nהדרי, מומלץ להוסיף ולתרגל";
-            //System.out.println(messageBottom) ;
         }
 
         // מונה מבחנים
@@ -653,48 +650,45 @@ public class Main {
 
         // הצג נתונים סופיים של כל הבחינות עד עתה
 
-        //System.out.println();
-        messageBottom += "\n__________________________________________\n";
+        messageBottom += "__________________________________________\n";
         if (g == MAXTESTS) { // להדפיס דוח סיכום כללי רק למבחן האחרון
             messageBottom += "\n_________________ סיכום __________________";
-            messageBottom += "__________________________________________\n";
+            messageBottom += "\n__________________________________________";
         }
         if(g > 1) { // מקרה קצה: הצג ציון ממוצע בכל המבחנים רק אם זה לא המבחן הראשון
-            messageBottom += "ציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g + "\n" +
-                               "זמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + "\n\n שניות" ;
-            //System.out.println();
+            messageBottom += "\nציונך הממוצע בכל המבחנים עד עתה הוא: " + gradeAll * 100 / MAXQUESTIONS / g +
+                               "\nזמנך הממוצע לפתירת תרגיל: " + secondsTestAll / MAXQUESTIONS / g + " שניות" + "\n";
         }
         if(g < MAXTESTS) { // מקרה קצה: שאל אם להמשיך למבחן הבא ככל שטרם הגיע המבחן האחרון
             // שאלה למשתמש האם ברצונו להמשיך למבחן נוסף
             messageBottom += "\nהאם ברצונך להמשיך למבחן הבא?";
             messageBottom += "\nלהמשך הקש 1; לסיום הקש 0" ;
 
-            // קבל קלט תשובה מהמשתמש (כפילות לפונקציה)
-            ////input = getAnswer(console);
-            System.out.println(messageBottom);
-            infoBox(messageBottom,  "סיום מבחן " + g);
             // אפס צובר כל המבחנים, את צובר כל זמן במחינה ואת צובר כל זמן 10 הבחינות,
             secondsTest = 0;
             //gradeAll = 0;
             //secondsTestAll = 0; // לא חובה לאפס כי זה נתון סופי
         }
-
+        // הדפס צבר הודעות
+        System.out.println(messageBottom);
+        infoBox(messageBottom,  "סיום מבחן " + g);
     }
 
     //////////////////////////////////////////////////////////////////////////////////
     // הצגת סיכום וסטטיסטיקות ממוצע ציונים, זמנים, הערכות והצגת דוח לשיפור בסיום סט כל המבחנים
     //////////////////////////////////////////////////////////////////////////////////
     public static void testsSetSummary() {
+        String messageBottom = "";
         // תנאי פירגון בסוף הסט
         if (gradeAll * 100 / MAXQUESTIONS / g == 100) {
-            System.out.println("===============================================");
-            System.out.println("אבא, קיבלתי 100!!!\n" +
-                    "תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש");
-            System.out.println("===============================================");
+            messageBottom += "===============================================";
+            messageBottom += "אבא, קיבלתי 100!!!\n" +
+                    "תקנה לי פלאפון עכשיו!!! תודה אבא, יש, יש, יש";
+            messageBottom +="===============================================";
         }
         if (targilTemp.size() > 0) {
-            System.out.println("רשימת תרגילים לשיפור (" + targilTemp.size() + ")");
-            System.out.println("-------------------------");
+            messageBottom += "רשימת תרגילים לשיפור (" + targilTemp.size() + ")" + "\n" +
+                             "-------------------------\n";
             // רשימת תרגילים שהמבצע התקשה בהם
             for (int s = 0; s < targilTemp.size(); s++) {
                 num1 = targilTemp.get(s)[0]; // מספר שמאלי
@@ -702,13 +696,15 @@ public class Main {
                 int num3 = targilTemp.get(s)[2]; // אם חיובי: אוגר מספר ניסיונות לאחר תשובה שגויה ; אם שלילי: אוגר תרגילים שלקח זמן רב לפתור
                 if (num3 > 0) {
                     // הצגת תרגיל עם בעיית פיתרון שגוי
-                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | ניסיון " + num3 + " |* ");
+                    messageBottom += num1 + " x " + num2 + " = " + num1 * num2 + " | ניסיון " + num3 + " |* " + "\n";
                 } else {
                     // הצגת תרגיל עם בעיית זמן הפיתרון
-                    System.out.println(num1 + " x " + num2 + " = " + num1 * num2 + " | שניות " + num3 * (-1) + " | ");
+                    messageBottom += num1 + " x " + num2 + " = " + num1 * num2 + " | שניות " + num3 * (-1) + " | " + "\n" ;
                 }
             }
         }
+        System.out.println(messageBottom);
+        infoBox(messageBottom,  "סיום סט מבחנים " + g);
         console.close();
         if (WITHSPEECH > 0) {
             speak("end of test");

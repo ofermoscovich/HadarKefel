@@ -622,7 +622,7 @@ public class Main {
     //////////////////////////////////////////////////////////////////////////////////
 	public static void endOfTest() {
 
-        String messageBottom;
+        String messageBottom, messageBottom2 = "";
         // צבור את שניות מתן התשובות של המבחן לצובר כל המבחנים
         secondsTestAll += secondsTest ;
 
@@ -664,15 +664,14 @@ public class Main {
         if(g < MAXTESTS) { // מקרה קצה: שאל אם להמשיך למבחן הבא ככל שטרם הגיע המבחן האחרון
             // שאלה למשתמש האם ברצונו להמשיך למבחן נוסף
             messageBottom += "\nהאם ברצונך להמשיך למבחן הבא?";
-            messageBottom += "\nלהמשך הקש 1; לסיום הקש 0" ;
-
+            messageBottom2 = "\nלהמשך הקש 1; לסיום הקש 0";
             // אפס צובר כל המבחנים, את צובר כל זמן במחינה ואת צובר כל זמן 10 הבחינות,
             secondsTest = 0;
             //gradeAll = 0;
             //secondsTestAll = 0; // לא חובה לאפס כי זה נתון סופי
         }
         // הדפס צבר הודעות
-        System.out.println(messageBottom);
+        System.out.println(messageBottom + messageBottom2);
         infoBox(messageBottom,  "סיום מבחן " + g);
     }
 

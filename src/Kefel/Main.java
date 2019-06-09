@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import java.awt.image.*;
 import javax.swing.ImageIcon.*;
 
+//-----------------------------------------------------------------------------
 // פרויקט לוח הכפל של הדרי
 // Speeching using FreeTTS
 
@@ -27,7 +28,7 @@ import javax.swing.ImageIcon.*;
 // You need to add 2 libraries to make the speech works:
 //  \freetts-1.2.2-bin\freetts-1.2\lib\cmu_us_kal.jar
 //  \freetts-1.2.2-bin\freetts-1.2\lib\freetts.jar
-
+//-----------------------------------------------------------------------------
 public class Main {
 
 	private static final int MAXTESTS = 10; // מקסימום מבחנים
@@ -37,10 +38,10 @@ public class Main {
 	private static final int SHOWTABLE = 0; // האם להציג את טבלת לוח הכפל: 1 כן; 2 לא
 	// מספר שמאלי
 	private static final int MINNUMBER1 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER1 = 10; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER1 = 9; // מספר אקראי מקסימלי בתרגיל
 	// מספר ימני
 	private static final int MINNUMBER2 = 2; // מספר אקראי מינימלי בתרגיל
-	private static final int MAXNUMBER2 = 10; // מספר אקראי מקסימלי בתרגיל
+	private static final int MAXNUMBER2 = 9; // מספר אקראי מקסימלי בתרגיל
 
 	private static final int SHUFFLE = 5;   // מספר הפעמים לערבב תרגילים: [1..] כן;0 לא לערבב
 
@@ -515,7 +516,7 @@ public class Main {
 //        AnswerDetails answerDetails = new AnswerDetails();
         String messgaeRemark1, messgaeRemark2;
 //        boolean falseAnswer=false;
-        long secondsDiffLong=0;
+        long secondsDiffLong; // initial 0
 //        int secondsDiff=0;
         Date now2=null;
 
@@ -626,19 +627,20 @@ public class Main {
         secondsTestAll += secondsTest ;
 
         // הצג ציון סופי של בחינה אחת
-        System.out.println("___________________________________________");
-        messageBottom = "הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
+        messageBottom = "___________________________________________\n" +
+                "הציון שלך הוא: " + grade * 100 / MAXQUESTIONS + "    \n" +
                 "הממוצע לתרגיל: " + secondsTest/MAXQUESTIONS + " שניות\n" +
                 "לקח לך להשיב: " + secondsTest + " שניות\n";
 
         // תנאים לפרגון או המלצה לשיפור
         if (grade * 100 / MAXQUESTIONS > 90){
             // אם הציון מעל 90 ציין זאת
-            messageBottom += "\nכל הכבוד הדרי - קיבלת ציון גבוה מאד !!!";
+            messageBottom += "___________________________________________\n" +
+                             "כל הכבוד הדרי - קיבלת ציון גבוה מאד !!!\n";
 
             if (secondsTest/MAXQUESTIONS < 9) {
                 // אם זמן תרגיל ממוצע פחות מ 10 שניות ציין זאת
-                messageBottom += "\nכל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל";
+                messageBottom += "כל הכבוד הדרי - המלכה  !!! פחות מ 9 שניות לתרגיל\n";
             }
         } else if (grade * 100 / MAXQUESTIONS < 60){
             // אם הציון מתחת 70 ציין זאת
